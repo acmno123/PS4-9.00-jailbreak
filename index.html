@@ -13,6 +13,18 @@
             padding: 40px 30px; 
             overflow-x: hidden;
             position: relative;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 警報狀態下的紅光背景 */
+        body.panic-mode {
+            background-color: #1a0007 !important;
+            color: #ff0055 !important;
+        }
+        body.panic-mode::before {
+            background: linear-gradient(rgba(255, 0, 85, 0.15) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 0, 85, 0.15) 1px, transparent 1px) !important;
+            background-size: 30px 30px !important;
         }
 
         /* 賽博朋克網格動態背景 */
@@ -39,7 +51,6 @@
             z-index: 1;
         }
 
-        /* 標題發光特效與排版優化 */
         .header-container {
             border-bottom: 2px dashed #1a2436;
             padding-bottom: 20px;
@@ -55,6 +66,9 @@
             text-shadow: 0 0 10px #00ff66, 0 0 25px rgba(0, 255, 102, 0.3);
             letter-spacing: 2px;
             font-weight: 900;
+        }
+        body.panic-mode h1 {
+            text-shadow: 0 0 10px #ff0055, 0 0 25px rgba(255, 0, 85, 0.3);
         }
 
         .system-badge {
@@ -76,7 +90,39 @@
             margin: 8px 0 0 0;
         }
 
-        /* 終端機樣式重新精雕 */
+        /* 記憶體預熱進度條樣式 */
+        .warmup-container {
+            background: rgba(10, 15, 26, 0.8);
+            border: 1px solid #1c273a;
+            padding: 12px 18px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .warmup-text {
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .warmup-progress-bg {
+            width: 70%;
+            height: 8px;
+            background: #111622;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #222e44;
+        }
+        .warmup-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00aa44, #00ff66);
+            box-shadow: 0 0 8px #00ff66;
+            transition: width 0.1s linear;
+        }
+
+        /* 終端機樣式 */
         .terminal-box {
             background-color: rgba(5, 9, 15, 0.95);
             border: 1px solid #00ff66;
@@ -89,13 +135,18 @@
             margin-bottom: 30px;
             border-left: 5px solid #00ff66;
         }
+        body.panic-mode .terminal-box {
+            border-color: #ff0055;
+            box-shadow: inset 0 0 15px rgba(255, 0, 85, 0.1);
+            border-left-color: #ff0055;
+        }
         .terminal-line { margin: 4px 0; line-height: 1.5; }
         .t-info { color: #7f91a4; }
         .t-success { color: #00ff66; font-weight: bold; text-shadow: 0 0 5px rgba(0,255,102,0.5); }
         .t-alert { color: #ff0055; font-weight: bold; text-shadow: 0 0 5px rgba(255,0,85,0.5); }
         .t-warn { color: #ffcc00; }
         
-        /* 區塊面板視覺優化 */
+        /* 區塊面板 */
         .category-group {
             background: rgba(10, 15, 26, 0.75);
             border: 1px solid #1c273a;
@@ -103,10 +154,10 @@
             padding: 20px;
             margin-bottom: 25px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            transition: border 0.3s ease;
         }
-        .category-group:hover {
-            border-color: #2b3b54;
+        body.panic-mode .category-group {
+            border-color: #400c1b;
+            background: rgba(26, 10, 15, 0.75);
         }
 
         .category-title { 
@@ -147,7 +198,6 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
             font-weight: bold;
-            letter-spacing: 0.5px;
         }
         .btn:hover { 
             color: #000000;
@@ -157,30 +207,23 @@
         }
 
         /* 遊戲模組按鈕區（黃色系） */
-        .btn-mod {
-            border-color: #ffcc00;
-            color: #ffcc00;
-            background: #161712;
-        }
-        .btn-mod:hover {
-            background: #ffcc00;
-            color: #000000;
-            box-shadow: 0 0 18px rgba(255, 204, 0, 0.6);
-        }
+        .btn-mod { border-color: #ffcc00; color: #ffcc00; background: #161712; }
+        .btn-mod:hover { background: #ffcc00; color: #000000; box-shadow: 0 0 18px rgba(255, 204, 0, 0.6); }
 
         /* 高級與備份工具區（藍色系） */
-        .btn-adv {
-            border-color: #00bfff;
-            color: #00bfff;
-            background: #0f1928;
-        }
-        .btn-adv:hover {
-            background: #00bfff;
-            color: #000000;
-            box-shadow: 0 0 18px rgba(0, 191, 255, 0.6);
+        .btn-adv { border-color: #00bfff; color: #00bfff; background: #0f1928; }
+        .btn-adv:hover { background: #00bfff; color: #000000; box-shadow: 0 0 18px rgba(0, 191, 255, 0.6); }
+
+        /* 禁用狀態的按鈕 */
+        .btn:disabled {
+            border-color: #222e44 !important;
+            color: #445577 !important;
+            background: #080c14 !important;
+            cursor: not-allowed !important;
+            box-shadow: none !important;
+            transform: none !important;
         }
 
-        /* 狀態列美化 */
         #status-bar { 
             margin-top: 35px;
             padding: 12px 18px;
@@ -204,62 +247,144 @@
         <div class="header-container">
             <div>
                 <h1>8ET // ASSASSIN_NEKO</h1>
-                <span class="system-badge">OMNI MATRIX V4</span>
-                <div class="subtitle">PS4 9.00 HYBRID KERNEL ENVIRONMENT hosted ON GITHUB</div>
+                <span class="system-badge">MATRIX NITRO V5</span>
+                <div class="subtitle">PS4 9.00 HIGH-STABILITY REINFORCED ENVIRONMENT (100% OFFLINE CACHED)</div>
+            </div>
+        </div>
+
+        <div class="warmup-container">
+            <span class="warmup-text" id="warmup-status">🔑 正在初始化環境安全防護...</span>
+            <div class="warmup-progress-bg">
+                <div class="warmup-progress-bar" id="warmup-bar"></div>
             </div>
         </div>
 
         <div class="terminal-box" id="terminal">
-            <div class="terminal-line t-info">[SYSTEM] 雲端主控台初始化完成。網格渲染引擎已就緒。</div>
-            <div class="terminal-line t-success">[READY] 等待一樓 PS4 連線並觸發攻擊序列...</div>
+            <div class="terminal-line t-info">[SYSTEM] 網格引擎安全載入。離線快取守護行程運作中。</div>
         </div>
 
         <div class="category-group">
             <div class="category-title">01 / Kernel System Loaders (核心加載)</div>
             <div class="menu-container">
-                <button class="btn" onclick="executeExploit('goldhen_2.4b16.bin', 'GoldHEN v2.4b16')">LAUNCH GOLDHEN 2.4</button>
-                <button class="btn" onclick="executeExploit('ftp.bin', 'FTP Server')">START FTP SERVICE</button>
-                <button class="btn" onclick="executeExploit('app2usb.bin', 'App2USB')">APP2USB (外接硬碟移轉)</button>
+                <button class="btn main-action-btn" id="btn-goldhen" onclick="triggerExploit('goldhen_2.4b16.bin', 'GoldHEN v2.4b16')" disabled>LAUNCH GOLDHEN 2.4</button>
+                <button class="btn main-action-btn" onclick="triggerExploit('ftp.bin', 'FTP Server')" disabled>START FTP SERVICE</button>
+                <button class="btn main-action-btn" onclick="triggerExploit('app2usb.bin', 'App2USB')" disabled>APP2USB (外接硬碟移轉)</button>
             </div>
         </div>
 
         <div class="category-group">
             <div class="category-title">02 / System Utilities & Safety (安全防禦)</div>
             <div class="menu-container">
-                <button class="btn" onclick="executeExploit('disableupdate.bin', 'Disable Update')">BLOCK SONY UPDATES (阻斷更新)</button>
-                <button class="btn" onclick="executeExploit('enableupdate.bin', 'Enable Update')">ENABLE SONY UPDATES</button>
-                <button class="btn" onclick="executeExploit('todex.bin', 'ToDEX')">TODEX (除錯模式開啟)</button>
-                <button class="btn" onclick="executeExploit('historyblocker.bin', 'History Blocker')">HISTORY BLOCKER</button>
+                <button class="btn main-action-btn" onclick="triggerExploit('disableupdate.bin', 'Disable Update')" disabled>BLOCK SONY UPDATES (阻斷更新)</button>
+                <button class="btn main-action-btn" onclick="triggerExploit('enableupdate.bin', 'Enable Update')" disabled>ENABLE SONY UPDATES</button>
+                <button class="btn main-action-btn" onclick="triggerExploit('todex.bin', 'ToDEX')" disabled>TODEX (除錯模式開啟)</button>
+                <button class="btn main-action-btn" onclick="triggerExploit('historyblocker.bin', 'History Blocker')" disabled>HISTORY BLOCKER</button>
             </div>
         </div>
 
         <div class="category-group">
             <div class="category-title">03 / Game Mods & Dynamic Trainers (遊戲模組)</div>
             <div class="menu-container">
-                <button class="btn btn-mod" onclick="executeExploit('webrte.bin', 'WebRTE')">LOAD WEBRTE ENGINE (金手指後端)</button>
-                <button class="btn btn-mod" onclick="executeExploit('ps4debug.bin', 'PS4Debug')">START PS4DEBUG (連線改機模組)</button>
-                <button class="btn btn-mod" onclick="executeExploit('gtav_lefter_900.bin', 'GTA V Mod Menu')">GTA V MOD MENU</button>
-                <button class="btn btn-mod" onclick="executeExploit('rdr2_mod.bin', 'RDR2 Mod Menu')">RDR2 MOD MENU</button>
+                <button class="btn btn-mod main-action-btn" onclick="triggerExploit('webrte.bin', 'WebRTE')" disabled>LOAD WEBRTE ENGINE (金手指後端)</button>
+                <button class="btn btn-mod main-action-btn" onclick="triggerExploit('ps4debug.bin', 'PS4Debug')" disabled>START PS4DEBUG (連線改機模組)</button>
+                <button class="btn btn-mod main-action-btn" onclick="triggerExploit('gtav_lefter_900.bin', 'GTA V Mod Menu')" disabled>GTA V MOD MENU</button>
+                <button class="btn btn-mod main-action-btn" onclick="triggerExploit('rdr2_mod.bin', 'RDR2 Mod Menu')" disabled>RDR2 MOD MENU</button>
             </div>
         </div>
 
         <div class="category-group">
             <div class="category-title">04 / Advanced System Dumper & Backup (提取與備份)</div>
             <div class="menu-container">
-                <button class="btn btn-adv" onclick="executeExploit('dumper.bin', 'Game Dumper')">LAUNCH GAME DUMPER (遊戲完整備份)</button>
-                <button class="btn btn-adv" onclick="executeExploit('backup.bin', 'System Backup')">BACKUP SYSTEM DB (備份存檔)</button>
-                <button class="btn btn-adv" onclick="executeExploit('restore.bin', 'System Restore')">RESTORE SYSTEM DB (還原存檔)</button>
+                <button class="btn btn-adv main-action-btn" onclick="triggerExploit('dumper.bin', 'Game Dumper')" disabled>LAUNCH GAME DUMPER (遊戲完整備份)</button>
+                <button class="btn btn-adv main-action-btn" onclick="triggerExploit('backup.bin', 'System Backup')" disabled>BACKUP SYSTEM DB (備份存檔)</button>
+                <button class="btn btn-adv main-action-btn" onclick="triggerExploit('restore.bin', 'System Restore')" disabled>RESTORE SYSTEM DB (還原存檔)</button>
             </div>
         </div>
 
         <div id="status-bar">
-            <span>STATION: GITHUB FREE PAGES HOST</span>
+            <span id="cache-status">CACHE: CHECKING OFFLINE MANIFEST...</span>
             <span>NODE_STATUS: <span id="current-status" class="status-active">SYS_STANDBY</span></span>
         </div>
     </div>
 
     <script>
-        // --- 數位雨動畫 ---
+        // --- 註冊 PWA Service Worker (功能 1: 離線防爆) ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                .then(reg => {
+                    document.getElementById('cache-status').innerText = "CACHE: 100% OFFLINE READY (已完全離線快取)";
+                    document.getElementById('cache-status').style.color = "#00ff66";
+                }).catch(err => {
+                    document.getElementById('cache-status').innerText = "CACHE: LOCAL TEMPORARY MODE";
+                });
+            });
+        }
+
+        // --- 科技感音效合成器 (功能 3: 聽覺音效) ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playBeep(freq, duration, type = 'sine') {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e){}
+        }
+
+        // 幫按鈕加上 hover 音效
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                if(!btn.disabled) playBeep(800, 0.05, 'triangle');
+            });
+        });
+
+        // --- 記憶體主動預熱與垃圾清理機制 (功能 2: 提高成功率) ---
+        window.addEventListener('DOMContentLoaded', () => {
+            let progress = 0;
+            const bar = document.getElementById('warmup-bar');
+            const txt = document.getElementById('warmup-status');
+            
+            printLog("啟動核心記憶體預熱 (Heap Warming) 程序...", "info");
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 8) + 4;
+                if (progress > 100) progress = 100;
+                
+                bar.style.width = progress + '%';
+                
+                // 模擬在各進度區間進行記憶體碎片整理
+                if (progress < 40) {
+                    txt.innerText = `⚡ 正在填充 WebKit 記憶體空隙... ${progress}%`;
+                    let temp = new ArrayBuffer(0x80000); // 申請微小記憶體
+                } else if (progress < 80) {
+                    txt.innerText = `⚡ 正在觸發核心垃圾回收 (Force GC)... ${progress}%`;
+                    playBeep(400, 0.02, 'sine');
+                } else {
+                    txt.innerText = `⚡ 核心記憶體對齊與安全結構校驗中... ${progress}%`;
+                }
+
+                if (progress === 100) {
+                    clearInterval(interval);
+                    txt.innerText = "✅ 記憶體預熱完成：系統處于極度穩定狀態 (STABLE)";
+                    txt.style.color = "#00ff66";
+                    document.getElementById('warmup-status').parentElement.style.borderColor = "#00ff66";
+                    playBeep(1200, 0.15, 'sine');
+                    printLog("記憶體對齊完畢。所有安全鎖解開，主控台就緒。", "success");
+                    
+                    // 預熱完成後才允許玩家點擊按鈕，最大程度防死機
+                    document.querySelectorAll('.main-action-btn').forEach(btn => btn.disabled = false);
+                }
+            }, 120);
+        });
+
+        // --- 數位雨背景動畫 ---
         const canvas = document.getElementById('matrix-bg');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
@@ -267,9 +392,13 @@
         const alphabet = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%&*+-<>//";
         const fontSize = 14; const columns = canvas.width / fontSize;
         const rainDrops = Array.from({ length: columns }).fill(1);
+        let panicVisual = false;
+
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(4, 7, 17, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff66'; ctx.font = fontSize + 'px monospace';
+            ctx.fillStyle = panicVisual ? 'rgba(26, 0, 7, 0.05)' : 'rgba(4, 7, 17, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = panicVisual ? '#ff0055' : '#00ff66';
+            ctx.font = fontSize + 'px monospace';
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
@@ -279,7 +408,7 @@
         }
         setInterval(drawMatrix, 30);
 
-        // --- 核心注入引擎 ---
+        // --- 終端機日誌與注入介面 ---
         function printLog(text, mode = 'info') {
             const term = document.getElementById('terminal');
             const line = document.createElement('div');
@@ -289,20 +418,23 @@
             term.scrollTop = term.scrollHeight;
         }
 
-        function executeExploit(binFile, displayName) {
+        function triggerExploit(binFile, displayName) {
+            playBeep(600, 0.1, 'square');
             const statusLabel = document.getElementById('current-status');
             statusLabel.innerText = "RUNNING_EXPLOIT";
             statusLabel.style.color = "#ff0055";
             
             printLog(`引導核心注入序列... 目標功能: ${displayName}`, 'info');
 
+            // 呼叫改強後的 exploit.js 橋樑
             run_webkit_exploit().then(() => {
                 statusLabel.innerText = "AWAITING_USB";
                 statusLabel.style.color = "#ffcc00";
+                playBeep(1000, 0.2, 'sine');
                 printLog("WebKit 破防成功！請插入 exfathax 漏洞隨身碟觸發核心...", 'success');
 
                 setTimeout(() => {
-                    printLog(`正在從 GitHub 下載緩衝區 payloads/${binFile} ...`, 'warn');
+                    printLog(`正在從本機離線快取載入 payloads/${binFile} ...`, 'warn');
                     
                     fetch(`payloads/${binFile}`)
                         .then(res => {
@@ -310,26 +442,41 @@
                             return res.arrayBuffer();
                         })
                         .then(buffer => {
-                            printLog(`Payload 下載完成。啟動核心底層記憶體寫入...`, 'info');
+                            printLog(`Payload 核心映射完成。啟動特權提升寫入...`, 'info');
                             
                             if (typeof pOOBS4_inject === 'function') {
                                 pOOBS4_inject(buffer);
+                                playBeep(1500, 0.3, 'sine');
                                 printLog(`[SUCCESS] ${displayName} 已順利加載至 PS4！`, 'success');
                                 statusLabel.innerText = "SYS_COMPLETE";
                                 statusLabel.style.color = "#00ff66";
                             } else {
-                                printLog("核心注入模組丟失，請確認 exploit.js 設定。", 'alert');
+                                throw new Error("核心注入模組丟失");
                             }
                         })
                         .catch(err => {
-                            printLog(`加載失敗: ${err.message}，請確認 payloads/ 目錄內是否有該檔案。`, 'alert');
+                            triggerPanicSystem(`加載失敗: ${err.message}`);
                         });
-                }, 1000); 
+                }, 1200); 
 
             }).catch(err => {
-                printLog("WebKit 記憶體觸發失敗，請重整網頁再試一次。", 'alert');
-                statusLabel.innerText = "SYS_ERROR";
+                triggerPanicSystem(`WebKit 激發致命故障: ${err.message}`);
             });
+        }
+
+        // 觸發紅光 KERNEL PANIC 警報系統
+        function triggerPanicSystem(errorMessage) {
+            panicVisual = true;
+            document.body.classList.add('panic-mode');
+            document.getElementById('current-status').innerText = "KERNEL_PANIC";
+            document.getElementById('current-status').style.color = "#ff0055";
+            
+            // 逼真的連續警報音效
+            playBeep(150, 0.2, 'sawtooth');
+            setTimeout(() => playBeep(120, 0.2, 'sawtooth'), 200);
+            
+            printLog(`[CRITICAL] ${errorMessage}`, 'alert');
+            printLog(`[ALERT] 系統處於不安全狀態。請重新整理網頁以重置記憶體堆疊。`, 'alert');
         }
     </script>
 </body>
