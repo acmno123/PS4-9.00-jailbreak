@@ -2,318 +2,280 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>8ET MATRIX // INSTANT OMEGA v7.3</title>
+    <title>8ET MATRIX // KERNEL EXPLOIT TERMINAL</title>
     <style>
         * { box-sizing: border-box; }
         body { 
-            background-color: #02050a; 
+            background-color: #030508; 
             color: #00ff66; 
             font-family: 'Consolas', 'Courier New', monospace; 
             margin: 0; 
             padding: 30px; 
-            overflow-x: hidden;
+            overflow: hidden;
             position: relative;
         }
 
-        body.panic-mode { background-color: #1a0005 !important; color: #ff0055 !important; }
-        body.panic-mode::before { background: linear-gradient(rgba(255, 0, 85, 0.08) 1px, transparent 1px) !important; }
-
-        body::before {
-            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(rgba(0, 255, 102, 0.02) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(0, 255, 102, 0.02) 1px, transparent 1px);
-            background-size: 20px 20px; z-index: -2;
-        }
-        body::after {
-            content: ""; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 4px, 6px 100%; z-index: 999; pointer-events: none; opacity: 0.4;
+        /* Canvas 背景 */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.15;
         }
 
-        #matrix-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.08; }
-        .main-frame { max-width: 1200px; margin: 0 auto; z-index: 1; position: relative; }
-
-        .glitch-flash { animation: glitch 0.15s ease-in-out; }
-        @keyframes glitch {
-            0% { transform: translate(2px, 1px) skew(0deg); filter: hue-rotate(90deg); }
-            50% { transform: translate(-1px, -1px) skew(2deg); opacity: 0.8; }
-            100% { transform: translate(0px, 0px) skew(0deg); }
+        .main-frame {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
         }
 
-        .header-container {
-            border-bottom: 2px dashed #00ff66; padding-bottom: 15px; margin-bottom: 25px;
-            display: flex; justify-content: space-between; align-items: flex-end;
+        h1 { 
+            font-size: 38px; 
+            margin: 0;
+            text-shadow: 0 0 8px #00ff66, 0 0 15px #005511;
+            letter-spacing: 3px;
+            display: inline-block;
         }
-        body.panic-mode .header-container { border-bottom-color: #ff0055; }
 
-        h1 { font-size: 45px; margin: 0; text-shadow: 0 0 15px #00ff66; font-weight: 900; letter-spacing: 3px; }
-        body.panic-mode h1 { text-shadow: 0 0 15px #ff0055; }
-        .system-badge { background: #ff0055; color: #000; font-weight: bold; font-size: 11px; padding: 3px 8px; vertical-align: super; margin-left: 10px; box-shadow: 0 0 12px #ff0055; }
-        .subtitle { color: #8899a6; font-size: 12px; letter-spacing: 2px; margin-top: 5px; }
-
-        .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
-        @media(max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
-
-        .terminal-box {
-            background-color: rgba(1, 3, 8, 0.98); border: 1px solid #00ff66;
-            box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.05), 0 10px 30px rgba(0,0,0,0.8);
-            padding: 15px; border-radius: 4px; border-left: 6px solid #00ff66;
-            display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 20px;
+        .system-badge {
+            background: #ff0055;
+            color: #000;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 2px 6px;
+            vertical-align: super;
+            margin-left: 10px;
+            text-shadow: none;
+            box-shadow: 0 0 8px #ff0055;
         }
-        body.panic-mode .terminal-box { border-color: #ff0055; border-left-color: #ff0055; }
-        .log-area { height: 160px; overflow-y: auto; margin-bottom: 10px; font-size: 12px; }
         
-        .shell-line { display: flex; align-items: center; border-top: 1px solid #101c2e; padding-top: 8px; color: #ffffff; }
-        .shell-prompt { color: #ff0055; font-weight: bold; margin-right: 8px; font-size: 12px; }
-        .shell-input { background: transparent; border: none; color: #00ff66; font-family: inherit; font-size: 12px; width: 100%; outline: none; }
+        .subtitle { 
+            color: #8899a6; 
+            font-size: 13px;
+            letter-spacing: 2px;
+            margin: 8px 0 25px 0;
+        }
 
+        /* 高級終端機樣式 */
+        .terminal-box {
+            background-color: rgba(5, 8, 12, 0.9);
+            border: 1px solid #00ff66;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+            padding: 15px;
+            border-radius: 4px;
+            text-align: left;
+            height: 160px;
+            overflow-y: auto;
+            font-size: 13px;
+            margin-bottom: 25px;
+            border-left: 4px solid #00ff66;
+        }
         .terminal-line { margin: 3px 0; line-height: 1.4; }
-        .t-info { color: #6b7c96; }
-        .t-success { color: #00ff66; font-weight: bold; }
-        .t-alert { color: #ff0055; font-weight: bold; }
+        .t-info { color: #8899a6; }
+        .t-success { color: #00ff66; font-weight: bold; text-shadow: 0 0 5px #00ff66; }
+        .t-alert { color: #ff0055; font-weight: bold; text-shadow: 0 0 5px #ff0055; }
         .t-warn { color: #ffcc00; }
         
-        .hud-panel { background: rgba(5, 10, 20, 0.9); border: 1px solid #14243b; padding: 15px; border-radius: 4px; display: flex; flex-direction: column; gap: 12px; }
-        .hud-title { font-size: 12px; font-weight: bold; color: #ffffff; border-bottom: 1px solid #14243b; padding-bottom: 8px; letter-spacing: 1px; }
-        .hud-item { display: flex; justify-content: space-between; font-size: 12px; }
-        .hud-label { color: #57677a; }
-        .hud-value { color: #00ff66; font-weight: bold; }
-
-        .category-group { background: rgba(4, 8, 17, 0.85); border: 1px solid #101c30; border-radius: 4px; padding: 16px; margin-bottom: 18px; }
-        body.panic-mode .category-group { border-color: #380412; }
-        .category-title { color: #ffffff; font-size: 12px; font-weight: bold; letter-spacing: 2px; margin-bottom: 12px; text-transform: uppercase; }
-        .category-title::before { content: "// "; color: #00ff66; }
-        body.panic-mode .category-title::before { color: #ff0055; }
-        
-        .menu-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
-        
-        .btn { 
-            background: #040812; border: 1px solid #00ff66; color: #00ff66; padding: 13px; 
-            font-size: 12px; font-family: inherit; cursor: pointer; border-radius: 3px; 
-            font-weight: bold; transition: all 0.1s ease; text-align: center;
+        .category-group {
+            background: rgba(16, 22, 32, 0.6);
+            border: 1px solid #1a2436;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
         }
-        .btn:hover:not(:disabled) { color: #000; background: #00ff66; box-shadow: 0 0 15px rgba(0,255,102,0.5); }
-        .btn-mod { border-color: #ffcc00; color: #ffcc00; }
-        .btn-mod:hover:not(:disabled) { background: #ffcc00 !important; }
-        .btn-chain { border-color: #b026ff; color: #b026ff; background: #0f031c; }
-        .btn-chain:hover:not(:disabled) { background: #b026ff !important; color: #000; box-shadow: 0 0 15px #b026ff; }
 
-        .btn:disabled { border-color: #0d1624 !important; color: #28364d !important; background: #020408 !important; cursor: not-allowed; }
+        .category-title { 
+            color: #ffffff; 
+            text-align: left; 
+            font-size: 14px; 
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        .category-title::before {
+            content: "::";
+            color: #ff0055;
+            margin-right: 8px;
+        }
+        
+        .menu-container { 
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        
+        /* 戰術級霓虹按鈕 */
+        .btn { 
+            background: #0d1117;
+            border: 1px solid #00ff66; 
+            color: #00ff66; 
+            padding: 14px; 
+            font-size: 14px; 
+            font-family: inherit;
+            cursor: pointer; 
+            border-radius: 3px; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .btn:hover { 
+            color: #000000;
+            background: #00ff66;
+            box-shadow: 0 0 15px #00ff66;
+            transform: scale(1.02);
+        }
 
-        #status-bar { margin-top: 25px; padding: 10px; background: #010307; border: 1px solid #101c30; font-size: 11px; color: #4e5e70; display: flex; justify-content: space-between; }
+        #status-bar { 
+            margin-top: 20px;
+            padding: 10px;
+            background: #05080c;
+            border-top: 1px solid #1a2436;
+            font-size: 12px;
+            color: #8899a6;
+            display: flex;
+            justify-content: space-between;
+        }
         .status-active { color: #00ff66; font-weight: bold; }
     </style>
+    <script src="exploit.js"></script>
 </head>
 <body>
 
     <canvas id="matrix-bg"></canvas>
 
-    <div class="main-frame" id="app-frame">
-        <div class="header-container">
-            <div>
-                <h1>8ET // ASSASSIN_NEKO</h1>
-                <span class="system-badge">INSTANT OMEGA v7.3</span>
-                <div class="subtitle">FAST-TRACK INJECTION HUB // ZERO-WAIT ENGINE</div>
+    <div class="main-frame">
+        <div>
+            <h1>8ET // ASSASSIN_NEKO</h1>
+            <span class="system-badge">CLOUD V2</span>
+        </div>
+        <div class="subtitle">PS4 9.00 KERNEL INJECTOR CORE // HOSTED ON GITHUB</div>
+
+        <div class="terminal-box" id="terminal">
+            <div class="terminal-line t-info">[SYSTEM] 初始化核心環境...</div>
+            <div class="terminal-line t-info">[SYSTEM] 記憶體防護網已解鎖。動態背景引擎載入成功。</div>
+            <div class="terminal-line t-success">[READY] 雲端主控台已就緒，等待 PS4 WebKit 調用...</div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-title">Core System Loaders</div>
+            <div class="menu-container">
+                <button class="btn" onclick="executeExploit('goldhen_2.4b16.bin', 'GoldHEN v2.4b16')">LAUNCH GOLDHEN 2.4</button>
+                <button class="btn" onclick="executeExploit('ftp.bin', 'FTP Server')">START FTP SERVICE</button>
             </div>
         </div>
 
-        <div class="dashboard-grid">
-            
-            <div class="menu-zone">
-                <div class="category-group">
-                    <div class="category-title">00 / Automated Multi-Payload Chains (一鍵雙星複合鏈)</div>
-                    <div class="menu-container">
-                        <button class="btn btn-chain" onclick="triggerMultiChain(['goldhen_2.4b16.bin', 'ps4debug.bin'], 'GoldHEN + ps4debug')">⚡ ONE-CLICK HYBRID: GOLDHEN + PS4DEBUG</button>
-                    </div>
-                </div>
-
-                <div class="category-group">
-                    <div class="category-title">01 / System Kernel Injectors (核心加載)</div>
-                    <div class="menu-container">
-                        <button class="btn" onclick="triggerExploit('goldhen_2.4b16.bin', 'GoldHEN v2.4b16')">LAUNCH GOLDHEN 2.4</button>
-                        <button class="btn" onclick="triggerExploit('ftp.bin', 'FTP Server')">START FTP SERVICE</button>
-                        <button class="btn" onclick="triggerExploit('app2usb.bin', 'App2USB')">APP2USB (外掛硬碟移轉)</button>
-                    </div>
-                </div>
-
-                <div class="category-group">
-                    <div class="category-title">02 / Trainers & Debug Tools (金手指與遠端修改)</div>
-                    <div class="menu-container">
-                        <button class="btn btn-mod" onclick="triggerExploit('webrte.bin', 'WebRTE')">LOAD WEBRTE ENGINE</button>
-                        <button class="btn btn-mod" onclick="triggerExploit('ps4debug.bin', 'PS4Debug')">START PS4DEBUG</button>
-                        <button class="btn btn-mod" onclick="triggerExploit('gtav_lefter_900.bin', 'GTA V Mod Menu')">GTA V MOD MENU</button>
-                    </div>
-                </div>
-
-                <div class="category-group">
-                    <div class="category-title">03 / Security Shields (系統防禦)</div>
-                    <div class="menu-container">
-                        <button class="btn" onclick="triggerExploit('disableupdate.bin', 'Disable Update')">BLOCK SONY UPDATES (阻斷更新)</button>
-                        <button class="btn" onclick="triggerExploit('todex.bin', 'ToDEX')">TODEX MODE</button>
-                    </div>
-                </div>
+        <div class="category-group">
+            <div class="category-title">Memory & Safety Patches</div>
+            <div class="menu-container">
+                <button class="btn" onclick="executeExploit('webrte.bin', 'WebRTE')">LOAD WEBRTE ENGINE</button>
+                <button class="btn" onclick="executeExploit('disableupdate.bin', 'Disable Update')">BLOCK SONY UPDATES</button>
             </div>
-
-            <div class="side-zone">
-                <div class="terminal-box" style="height: 250px;">
-                    <div class="log-area" id="log-zone">
-                        <div class="terminal-line t-success">[SYSTEM] 極速雙軌引導環境就緒。</div>
-                    </div>
-                    <div class="shell-line">
-                        <span class="shell-prompt">neko@8et:~#</span>
-                        <input type="text" class="shell-input" id="sh-in" placeholder="輸入指令...">
-                    </div>
-                </div>
-
-                <div class="hud-panel">
-                    <div class="hud-title">📊 REALTIME MONITOR</div>
-                    <div class="hud-item"><span class="hud-label">WebKit Status</span><span class="hud-value">FAST_MODE</span></div>
-                    <div class="hud-item"><span class="hud-label">Syscall Clocks</span><span class="hud-value">STANDBY</span></div>
-                    <div class="hud-item"><span class="hud-label">Verifier</span><span class="hud-value" style="color: #00ff66;">HYBRID_READY</span></div>
-                    <div class="hud-item"><span class="hud-label">USB Intercept</span><span class="hud-value" style="color: #8899a6;">STANDBY</span></div>
-                </div>
-            </div>
-
         </div>
 
         <div id="status-bar">
-            <span id="cache-status">CACHE: INITIALIZING...</span>
-            <span>RETRY LOOP: <span id="retry-counter" style="color:#ffffff;">MONITORING</span></span>
+            <span>ENVIRONMENT: PRODUCTION (GITHUB PAGES)</span>
             <span>STATUS: <span id="current-status" class="status-active">SYS_STANDBY</span></span>
         </div>
     </div>
 
     <script>
-        // 日誌與特效基礎設定
-        window.addEventListener('DOMContentLoaded', () => {
-            printLog("控制面板載入完成。等待底層 WebKit 核心綁定...", "info");
-            triggerGlitchEffect();
-            
-            // 檢查外部核心是否成功掛載
-            setTimeout(() => {
-                if (typeof window.run_webkit_exploit === 'function') {
-                    printLog("[CORE] 成功聯結外部 WebKit 漏洞代碼！防護鎖完全解除。", "success");
-                } else {
-                    printLog("[WARN] 尚未偵測到 exploit.js，請確認檔案已上傳至根目錄。", "warn");
+        // --- 數位雨背景動畫引擎 ---
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const alphabet = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%&*+-<>//";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array.from({ length: columns }).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(3, 5, 8, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff66';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
                 }
-            }, 500);
-        });
-
-        // PWA 快取
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').then(() => {
-                    document.getElementById('cache-status').innerText = "CACHE: 100% LOCAL CACHED";
-                    document.getElementById('cache-status').style.color = "#00ff66";
-                });
-            });
-        }
-
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(freq, duration, type = 'sine') {
-            try {
-                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-                osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + duration);
-            } catch(e){}
-        }
-
-        function triggerGlitchEffect() {
-            const frame = document.getElementById('app-frame');
-            if(frame) {
-                frame.classList.add('glitch-flash');
-                setTimeout(() => frame.classList.remove('glitch-flash'), 150);
+                rainDrops[i]++;
             }
         }
+        setInterval(drawMatrix, 30);
 
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('mouseenter', () => { playSound(1000, 0.02, 'sine'); });
-        });
-
+        // --- 核心優化非同步注入引擎 ---
         function printLog(text, mode = 'info') {
-            const zone = document.getElementById('log-zone'); if(!zone) return;
+            const term = document.getElementById('terminal');
             const line = document.createElement('div');
-            line.className = `terminal-line t-${mode}`; line.innerText = `[${new Date().toLocaleTimeString()}] ${text}`;
-            zone.appendChild(line); zone.scrollTop = zone.scrollHeight;
+            line.className = `terminal-line t-${mode}`;
+            line.innerText = `[${new Date().toLocaleTimeString()}] ${text}`;
+            term.appendChild(line);
+            term.scrollTop = term.scrollHeight;
         }
 
-        let currentRetry = 0;
-        let maxRetries = 3;
+        function executeExploit(binFile, displayName) {
+            const statusLabel = document.getElementById('current-status');
+            statusLabel.innerText = "RUNNING_EXPLOIT";
+            statusLabel.style.color = "#ff0055";
+            
+            printLog(`發動 WebKit 漏洞攻擊序列... 目標: ${displayName}`, 'info');
 
-        function run_exploit_with_retry() {
-            return new Promise((resolve, reject) => {
-                function attempt() {
-                    if (typeof window.run_webkit_exploit === 'function') {
-                        window.run_webkit_exploit().then(resolve).catch(err => {
-                            currentRetry++;
-                            document.getElementById('retry-counter').innerText = `LOOP_${currentRetry}/${maxRetries}`;
-                            printLog(`[重試] 記憶體對齊修正中 (第 ${currentRetry} 次)...`, "warn");
-                            if (currentRetry < maxRetries) { setTimeout(attempt, 400); } 
-                            else { reject(new Error("WebKit 觸發環境不穩定")); }
+            // 執行 WebKit 記憶體溢位
+            run_webkit_exploit().then(() => {
+                statusLabel.innerText = "AWAITING_USB";
+                statusLabel.style.color = "#ffcc00";
+                printLog("WebKit 第一階段突破成功！核心記憶體已掛起。", 'success');
+                printLog("請插入 9.00 exfathax 漏洞隨身碟以解鎖核心權限！", 'alert');
+
+                // 異步抓取二進位資料，優化 PS4 記憶體處理
+                setTimeout(() => {
+                    printLog(`非同步緩衝區載入中：正在拉取 payloads/${binFile} ...`, 'warn');
+                    
+                    fetch(`payloads/${binFile}`)
+                        .then(res => {
+                            if (!res.ok) throw new Error("檔案不存在");
+                            return res.arrayBuffer();
+                        })
+                        .then(buffer => {
+                            printLog(`Payload 下載完成 (${buffer.byteLength} 字節)。等待主控端完成內置注入...`, 'info');
+                            
+                            // 呼叫底層實體注入
+                            if (typeof pOOBS4_inject === 'function') {
+                                pOOBS4_inject(buffer);
+                                printLog(`[SUCCESS] ${displayName} 已成功注入核心！`, 'success');
+                                statusLabel.innerText = "SYS_COMPLETE";
+                                statusLabel.style.color = "#00ff66";
+                            } else {
+                                printLog("未偵測到 pOOBS4_inject 副程式，請檢查 exploit.js。", 'alert');
+                            }
+                        })
+                        .catch(err => {
+                            printLog(`網路拉取錯誤: ${err.message}，請確認專案路徑是否有該 bin 檔。`, 'alert');
                         });
-                    } else {
-                        reject(new Error("找不到底層漏洞代碼 (exploit.js 遺失)"));
-                    }
-                }
-                attempt();
+                }, 1000); 
+
+            }).catch(err => {
+                printLog("WebKit 記憶體激發失敗，請重新整理瀏覽器頁面。", 'alert');
+                statusLabel.innerText = "SYS_ERROR";
             });
         }
-
-        function triggerExploit(binFile, displayName) {
-            triggerGlitchEffect();
-            currentRetry = 0;
-            const lbl = document.getElementById('current-status');
-            lbl.innerText = "INJECTING"; lbl.style.color = "#ff0055";
-            printLog(`核心發送序列啟動 -> 目標: ${displayName}`, 'info');
-
-            run_exploit_with_retry().then(() => {
-                lbl.innerText = "AWAITING_USB"; lbl.style.color = "#ffcc00";
-                printLog("WebKit 破防成功！請插入漏洞隨身碟觸發 Kernel 漏洞...", 'success');
-                
-                setTimeout(() => {
-                    fetch(`payloads/${binFile}`).then(res => res.arrayBuffer()).then(buf => {
-                        if (typeof pOOBS4_inject === 'function' && pOOBS4_inject(buf)) {
-                            printLog(`[SUCCESS] ${displayName} 部署成功！`, 'success');
-                            lbl.innerText = "SYS_COMPLETE"; lbl.style.color = "#00ff66";
-                        }
-                    }).catch(e => triggerPanic(`讀取 payloads/${binFile} 失敗`));
-                }, 1000);
-            }).catch(err => triggerPanic(err.err || err.message));
-        }
-
-        function triggerMultiChain(binArray, chainName) {
-            triggerGlitchEffect();
-            currentRetry = 0;
-            const lbl = document.getElementById('current-status');
-            lbl.innerText = "CHAIN_LOAD"; lbl.style.color = "#b026ff";
-            printLog(`[CHAIN] 雙星複合鏈發送 -> [${chainName}]`, 'warn');
-
-            run_exploit_with_retry().then(() => {
-                lbl.innerText = "AWAITING_USB"; lbl.style.color = "#ffcc00";
-                printLog("鏈結破防成功！請接入漏洞隨身碟...", "success");
-
-                Promise.all(binArray.map(bin => fetch(`payloads/${bin}`).then(res => res.arrayBuffer())))
-                .then(buffers => {
-                    buffers.forEach((buf, idx) => {
-                        if (typeof pOOBS4_inject === 'function') pOOBS4_inject(buf);
-                    });
-                    printLog(`[SUCCESS] 複合鏈 [${chainName}] 部署完畢！`, 'success');
-                    lbl.innerText = "SYS_COMPLETE"; lbl.style.color = "#00ff66";
-                }).catch(e => triggerPanic("鏈結資源加載失敗"));
-            }).catch(err => triggerPanic(err.message));
-        }
-
-        function triggerPanic(msg) {
-            document.body.classList.add('panic-mode');
-            document.getElementById('current-status').innerText = "KERNEL_PANIC";
-            printLog(`[CRITICAL] ${msg}`, 'alert');
-            triggerGlitchEffect();
-        }
     </script>
-    
-    <script src="exploit.js"></script>
 </body>
 </html>
