@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>8ET MATRIX // KERNEL EXPLOIT TERMINAL</title>
+    <title>PS4 Jailbreak</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -11,11 +11,10 @@
             font-family: 'Consolas', 'Courier New', monospace; 
             margin: 0; 
             padding: 30px; 
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
         }
 
-        /* Canvas 背景 */
         #matrix-bg {
             position: fixed;
             top: 0;
@@ -23,11 +22,11 @@
             width: 100vw;
             height: 100vh;
             z-index: -1;
-            opacity: 0.15;
+            opacity: 0.12;
         }
 
         .main-frame {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             position: relative;
             z-index: 1;
@@ -49,7 +48,6 @@
             padding: 2px 6px;
             vertical-align: super;
             margin-left: 10px;
-            text-shadow: none;
             box-shadow: 0 0 8px #ff0055;
         }
         
@@ -60,15 +58,13 @@
             margin: 8px 0 25px 0;
         }
 
-        /* 高級終端機樣式 */
         .terminal-box {
             background-color: rgba(5, 8, 12, 0.9);
             border: 1px solid #00ff66;
             box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
             padding: 15px;
             border-radius: 4px;
-            text-align: left;
-            height: 160px;
+            height: 150px;
             overflow-y: auto;
             font-size: 13px;
             margin-bottom: 25px;
@@ -95,7 +91,6 @@
             font-weight: bold;
             letter-spacing: 2px;
             margin-bottom: 12px;
-            text-transform: uppercase;
             display: flex;
             align-items: center;
         }
@@ -107,21 +102,20 @@
         
         .menu-container { 
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
             gap: 12px;
         }
         
-        /* 戰術級霓虹按鈕 */
         .btn { 
             background: #0d1117;
             border: 1px solid #00ff66; 
             color: #00ff66; 
             padding: 14px; 
-            font-size: 14px; 
+            font-size: 13px; 
             font-family: inherit;
             cursor: pointer; 
             border-radius: 3px; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
             text-align: center;
             font-weight: bold;
         }
@@ -131,6 +125,17 @@
             background: #00ff66;
             box-shadow: 0 0 15px #00ff66;
             transform: scale(1.02);
+        }
+
+        /* 遊戲模組按鈕專屬特殊樣式 */
+        .btn-mod {
+            border: 1px solid #ffcc00;
+            color: #ffcc00;
+        }
+        .btn-mod:hover {
+            background: #ffcc00;
+            color: #000;
+            box-shadow: 0 0 15px #ffcc00;
         }
 
         #status-bar { 
@@ -154,73 +159,78 @@
     <div class="main-frame">
         <div>
             <h1>8ET // ASSASSIN_NEKO</h1>
-            <span class="system-badge">CLOUD V2</span>
+            <span class="system-badge">EXTENDED V3</span>
         </div>
-        <div class="subtitle">PS4 9.00 KERNEL INJECTOR CORE // HOSTED ON GITHUB</div>
+        <div class="subtitle">PS4 9.00 KERNEL SYSTEM & GAME MOD INJECTOR CENTER</div>
 
+        <!-- 進階終端機 -->
         <div class="terminal-box" id="terminal">
-            <div class="terminal-line t-info">[SYSTEM] 初始化核心環境...</div>
-            <div class="terminal-line t-info">[SYSTEM] 記憶體防護網已解鎖。動態背景引擎載入成功。</div>
-            <div class="terminal-line t-success">[READY] 雲端主控台已就緒，等待 PS4 WebKit 調用...</div>
+            <div class="terminal-line t-info">[SYSTEM] 核心環境就緒。大容量模組控制中心已載入。</div>
+            <div class="terminal-line t-success">[READY] 等待 PS4 WebKit 觸發...</div>
         </div>
 
+        <!-- 區塊 1：核心系統升級 -->
         <div class="category-group">
-            <div class="category-title">Core System Loaders</div>
+            <div class="category-title">Core System Loaders (核心系統)</div>
             <div class="menu-container">
                 <button class="btn" onclick="executeExploit('goldhen_2.4b16.bin', 'GoldHEN v2.4b16')">LAUNCH GOLDHEN 2.4</button>
                 <button class="btn" onclick="executeExploit('ftp.bin', 'FTP Server')">START FTP SERVICE</button>
+                <button class="btn" onclick="executeExploit('app2usb.bin', 'App2USB')">APP2USB (遊戲外掛硬碟移轉)</button>
+                <button class="btn" onclick="executeExploit('backup.bin', 'System Backup')">BACKUP SYSTEM DB (備份存檔)</button>
             </div>
         </div>
 
+        <!-- 區塊 2：安全防護與進階工具 -->
         <div class="category-group">
-            <div class="category-title">Memory & Safety Patches</div>
+            <div class="category-title">System Utilities & Safety (系統工具)</div>
             <div class="menu-container">
-                <button class="btn" onclick="executeExploit('webrte.bin', 'WebRTE')">LOAD WEBRTE ENGINE</button>
-                <button class="btn" onclick="executeExploit('disableupdate.bin', 'Disable Update')">BLOCK SONY UPDATES</button>
+                <button class="btn" onclick="executeExploit('disableupdate.bin', 'Disable Update')">BLOCK SONY UPDATES (阻斷更新)</button>
+                <button class="btn" onclick="executeExploit('enableupdate.bin', 'Enable Update')">ENABLE SONY UPDATES</button>
+                <button class="btn" onclick="executeExploit('todex.bin', 'ToDEX')">TODEX (解鎖除錯模式功能)</button>
+                <button class="btn" onclick="executeExploit('historyblocker.bin', 'History Blocker')">HISTORY BLOCKER (防瀏覽器失效)</button>
             </div>
         </div>
 
+        <!-- 區塊 3：遊戲模組與金手指引擎（全新加入！） -->
+        <div class="category-group">
+            <div class="category-title">Game Mods & Trainers Engine (遊戲模組與修改器)</div>
+            <div class="menu-container">
+                <button class="btn btn-mod" onclick="executeExploit('webrte.bin', 'WebRTE')">LOAD WEBRTE ENGINE (金手指後端)</button>
+                <button class="btn btn-mod" onclick="executeExploit('ps4debug.bin', 'PS4Debug')">START PS4DEBUG (電腦連線改機模組)</button>
+                <button class="btn btn-mod" onclick="executeExploit('gtav_lefter_900.bin', 'GTA V Mod Menu')">GTA V MOD MENU (俠盜獵車手Mod選單)</button>
+                <button class="btn btn-mod" onclick="executeExploit('rdr2_mod.bin', 'RDR2 Mod Menu')">RDR2 MOD MENU (碧血狂殺2選單)</button>
+            </div>
+        </div>
+
+        <!-- 底層狀態列 -->
         <div id="status-bar">
-            <span>ENVIRONMENT: PRODUCTION (GITHUB PAGES)</span>
+            <span>ENVIRONMENT: GITHUB CLOUD SERVER</span>
             <span>STATUS: <span id="current-status" class="status-active">SYS_STANDBY</span></span>
         </div>
     </div>
 
     <script>
-        // --- 數位雨背景動畫引擎 ---
+        // --- 數位雨動畫 ---
         const canvas = document.getElementById('matrix-bg');
         const ctx = canvas.getContext('2d');
-        
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas); resizeCanvas();
         const alphabet = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%&*+-<>//";
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
+        const fontSize = 14; const columns = canvas.width / fontSize;
         const rainDrops = Array.from({ length: columns }).fill(1);
-
         function drawMatrix() {
-            ctx.fillStyle = 'rgba(3, 5, 8, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff66';
-            ctx.font = fontSize + 'px monospace';
-
+            ctx.fillStyle = 'rgba(3, 5, 8, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff66'; ctx.font = fontSize + 'px monospace';
             for (let i = 0; i < rainDrops.length; i++) {
                 const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
                 ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) rainDrops[i] = 0;
                 rainDrops[i]++;
             }
         }
         setInterval(drawMatrix, 30);
 
-        // --- 核心優化非同步注入引擎 ---
+        // --- 核心注入引擎 ---
         function printLog(text, mode = 'info') {
             const term = document.getElementById('terminal');
             const line = document.createElement('div');
@@ -235,44 +245,40 @@
             statusLabel.innerText = "RUNNING_EXPLOIT";
             statusLabel.style.color = "#ff0055";
             
-            printLog(`發動 WebKit 漏洞攻擊序列... 目標: ${displayName}`, 'info');
+            printLog(`引導核心注入序列... 目標功能: ${displayName}`, 'info');
 
-            // 執行 WebKit 記憶體溢位
             run_webkit_exploit().then(() => {
                 statusLabel.innerText = "AWAITING_USB";
                 statusLabel.style.color = "#ffcc00";
-                printLog("WebKit 第一階段突破成功！核心記憶體已掛起。", 'success');
-                printLog("請插入 9.00 exfathax 漏洞隨身碟以解鎖核心權限！", 'alert');
+                printLog("WebKit 破防成功！等待 exfathax 漏洞隨身碟觸發...", 'success');
 
-                // 異步抓取二進位資料，優化 PS4 記憶體處理
                 setTimeout(() => {
-                    printLog(`非同步緩衝區載入中：正在拉取 payloads/${binFile} ...`, 'warn');
+                    printLog(`正在從雲端載入 payloads/${binFile} ...`, 'warn');
                     
                     fetch(`payloads/${binFile}`)
                         .then(res => {
-                            if (!res.ok) throw new Error("檔案不存在");
+                            if (!res.ok) throw new Error("找不到對應的 bin 檔案");
                             return res.arrayBuffer();
                         })
                         .then(buffer => {
-                            printLog(`Payload 下載完成 (${buffer.byteLength} 字節)。等待主控端完成內置注入...`, 'info');
+                            printLog(`Payload 緩衝區下載完成。啟動核心底層寫入...`, 'info');
                             
-                            // 呼叫底層實體注入
                             if (typeof pOOBS4_inject === 'function') {
                                 pOOBS4_inject(buffer);
-                                printLog(`[SUCCESS] ${displayName} 已成功注入核心！`, 'success');
+                                printLog(`[SUCCESS] ${displayName} 已順利加載至 PS4！`, 'success');
                                 statusLabel.innerText = "SYS_COMPLETE";
                                 statusLabel.style.color = "#00ff66";
                             } else {
-                                printLog("未偵測到 pOOBS4_inject 副程式，請檢查 exploit.js。", 'alert');
+                                printLog("核心注入模組丟失，請確認 exploit.js 設定。", 'alert');
                             }
                         })
                         .catch(err => {
-                            printLog(`網路拉取錯誤: ${err.message}，請確認專案路徑是否有該 bin 檔。`, 'alert');
+                            printLog(`加載失敗: ${err.message}，請確認 payloads/ 目錄內是否有該檔案。`, 'alert');
                         });
                 }, 1000); 
 
             }).catch(err => {
-                printLog("WebKit 記憶體激發失敗，請重新整理瀏覽器頁面。", 'alert');
+                printLog("WebKit 激發失敗，請重整網頁再試一次。", 'alert');
                 statusLabel.innerText = "SYS_ERROR";
             });
         }
