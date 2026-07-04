@@ -2,84 +2,278 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>8ET HACKING CONSOLE // GITHUB HOST</title>
+    <title>8ET MATRIX // KERNEL EXPLOIT TERMINAL</title>
     <style>
-        body { background-color: #0a0c10; color: #00ffcc; font-family: 'Courier New', monospace; text-align: center; padding: 30px; margin: 0; }
-        h1 { font-size: 42px; color: #00ffcc; text-shadow: 0 0 10px #00ffcc; }
-        .subtitle { color: #ff0055; font-size: 14px; letter-spacing: 4px; margin-bottom: 30px; }
-        .terminal-box { background-color: #05070a; border: 1px solid #00ffcc; max-width: 900px; margin: 0 auto 30px auto; padding: 15px; border-radius: 5px; text-align: left; height: 100px; overflow-y: auto; font-size: 14px; }
-        .terminal-line { color: #8899a6; margin: 2px 0; }
-        .terminal-success { color: #00ffcc; font-weight: bold; }
-        .terminal-alert { color: #ff0055; font-weight: bold; }
-        .category-title { color: #ff0055; text-align: left; max-width: 900px; margin: 30px auto 12px auto; font-size: 16px; border-left: 3px solid #ff0055; padding-left: 10px; }
-        .menu-container { display: flex; justify-content: flex-start; gap: 15px; flex-wrap: wrap; max-width: 900px; margin: 0 auto; }
-        .btn { background: #10141d; border: 1px solid #005544; color: #00ffcc; padding: 16px 20px; font-size: 15px; cursor: pointer; border-radius: 4px; transition: all 0.25s; width: 210px; }
-        .btn:hover { color: #ffffff; background: #00ffcc; box-shadow: 0 0 20px #00ffcc; transform: translateY(-3px); font-weight: bold; }
-        #status { margin-top: 40px; font-size: 18px; color: #00ffcc; background: #0b1116; display: inline-block; padding: 12px 35px; border-radius: 4px; border: 1px solid #ff0055; }
+        * { box-sizing: border-box; }
+        body { 
+            background-color: #030508; 
+            color: #00ff66; 
+            font-family: 'Consolas', 'Courier New', monospace; 
+            margin: 0; 
+            padding: 30px; 
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Canvas 背景 */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        .main-frame {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 { 
+            font-size: 38px; 
+            margin: 0;
+            text-shadow: 0 0 8px #00ff66, 0 0 15px #005511;
+            letter-spacing: 3px;
+            display: inline-block;
+        }
+
+        .system-badge {
+            background: #ff0055;
+            color: #000;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 2px 6px;
+            vertical-align: super;
+            margin-left: 10px;
+            text-shadow: none;
+            box-shadow: 0 0 8px #ff0055;
+        }
+        
+        .subtitle { 
+            color: #8899a6; 
+            font-size: 13px;
+            letter-spacing: 2px;
+            margin: 8px 0 25px 0;
+        }
+
+        /* 高級終端機樣式 */
+        .terminal-box {
+            background-color: rgba(5, 8, 12, 0.9);
+            border: 1px solid #00ff66;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+            padding: 15px;
+            border-radius: 4px;
+            text-align: left;
+            height: 160px;
+            overflow-y: auto;
+            font-size: 13px;
+            margin-bottom: 25px;
+            border-left: 4px solid #00ff66;
+        }
+        .terminal-line { margin: 3px 0; line-height: 1.4; }
+        .t-info { color: #8899a6; }
+        .t-success { color: #00ff66; font-weight: bold; text-shadow: 0 0 5px #00ff66; }
+        .t-alert { color: #ff0055; font-weight: bold; text-shadow: 0 0 5px #ff0055; }
+        .t-warn { color: #ffcc00; }
+        
+        .category-group {
+            background: rgba(16, 22, 32, 0.6);
+            border: 1px solid #1a2436;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        .category-title { 
+            color: #ffffff; 
+            text-align: left; 
+            font-size: 14px; 
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        .category-title::before {
+            content: "::";
+            color: #ff0055;
+            margin-right: 8px;
+        }
+        
+        .menu-container { 
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        
+        /* 戰術級霓虹按鈕 */
+        .btn { 
+            background: #0d1117;
+            border: 1px solid #00ff66; 
+            color: #00ff66; 
+            padding: 14px; 
+            font-size: 14px; 
+            font-family: inherit;
+            cursor: pointer; 
+            border-radius: 3px; 
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .btn:hover { 
+            color: #000000;
+            background: #00ff66;
+            box-shadow: 0 0 15px #00ff66;
+            transform: scale(1.02);
+        }
+
+        #status-bar { 
+            margin-top: 20px;
+            padding: 10px;
+            background: #05080c;
+            border-top: 1px solid #1a2436;
+            font-size: 12px;
+            color: #8899a6;
+            display: flex;
+            justify-content: space-between;
+        }
+        .status-active { color: #00ff66; font-weight: bold; }
     </style>
     <script src="exploit.js"></script>
 </head>
 <body>
 
-    <h1>8ET 刺客貓貓 // CLOUD_FRAME</h1>
-    <div class="subtitle">PS4 9.00 GITHUB WEB HOSTED SYSTEM</div>
+    <canvas id="matrix-bg"></canvas>
 
-    <div class="terminal-box" id="terminal">
-        <div class="terminal-line">[SYSTEM] GitHub 雲端主控台已就緒。</div>
-        <div class="terminal-line">[SYSTEM] 請在一樓 PS4 連上網路並點擊下方按鈕...</div>
+    <div class="main-frame">
+        <div>
+            <h1>8ET // ASSASSIN_NEKO</h1>
+            <span class="system-badge">CLOUD V2</span>
+        </div>
+        <div class="subtitle">PS4 9.00 KERNEL INJECTOR CORE // HOSTED ON GITHUB</div>
+
+        <div class="terminal-box" id="terminal">
+            <div class="terminal-line t-info">[SYSTEM] 初始化核心環境...</div>
+            <div class="terminal-line t-info">[SYSTEM] 記憶體防護網已解鎖。動態背景引擎載入成功。</div>
+            <div class="terminal-line t-success">[READY] 雲端主控台已就緒，等待 PS4 WebKit 調用...</div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-title">Core System Loaders</div>
+            <div class="menu-container">
+                <button class="btn" onclick="executeExploit('goldhen_2.4b16.bin', 'GoldHEN v2.4b16')">LAUNCH GOLDHEN 2.4</button>
+                <button class="btn" onclick="executeExploit('ftp.bin', 'FTP Server')">START FTP SERVICE</button>
+            </div>
+        </div>
+
+        <div class="category-group">
+            <div class="category-title">Memory & Safety Patches</div>
+            <div class="menu-container">
+                <button class="btn" onclick="executeExploit('webrte.bin', 'WebRTE')">LOAD WEBRTE ENGINE</button>
+                <button class="btn" onclick="executeExploit('disableupdate.bin', 'Disable Update')">BLOCK SONY UPDATES</button>
+            </div>
+        </div>
+
+        <div id="status-bar">
+            <span>ENVIRONMENT: PRODUCTION (GITHUB PAGES)</span>
+            <span>STATUS: <span id="current-status" class="status-active">SYS_STANDBY</span></span>
+        </div>
     </div>
-
-    <div class="category-title">// 01 _ CLOUD_INJECTION</div>
-    <div class="menu-container">
-        <button class="btn" onclick="triggerCloudExploit('goldhen_2.4b16.bin')">GoldHEN v2.4b16</button>
-        <button class="btn" onclick="triggerCloudExploit('webrte.bin')">WebRTE Trainer</button>
-        <button class="btn" onclick="triggerCloudExploit('ftp.bin')">FTP Server</button>
-        <button class="btn" onclick="triggerCloudExploit('disableupdate.bin')">Disable Update</button>
-    </div>
-
-    <div id="status">CONSOLE_STATUS: CLOUD_READY</div>
 
     <script>
-        function logToTerminal(text, type = 'normal') {
+        // --- 數位雨背景動畫引擎 ---
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const alphabet = "0101010101ABCDEFGHIJKLMNOPQRSTUVWXYZ#@$%&*+-<>//";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array.from({ length: columns }).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(3, 5, 8, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#00ff66';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 30);
+
+        // --- 核心優化非同步注入引擎 ---
+        function printLog(text, mode = 'info') {
             const term = document.getElementById('terminal');
             const line = document.createElement('div');
-            line.className = 'terminal-line';
-            if(type === 'success') line.className += ' terminal-success';
-            if(type === 'alert') line.className += ' terminal-alert';
-            line.innerText = `[${new Date().toLocaleTimeString()}] ` + text;
+            line.className = `terminal-line t-${mode}`;
+            line.innerText = `[${new Date().toLocaleTimeString()}] ${text}`;
             term.appendChild(line);
             term.scrollTop = term.scrollHeight;
         }
 
-        function triggerCloudExploit(binFileName) {
-            document.getElementById('status').innerText = "CONSOLE_STATUS: RUNNING_WEBKIT...";
-            logToTerminal(`下載並加載漏洞核心... 準備注入: ${binFileName}`);
+        function executeExploit(binFile, displayName) {
+            const statusLabel = document.getElementById('current-status');
+            statusLabel.innerText = "RUNNING_EXPLOIT";
+            statusLabel.style.color = "#ff0055";
+            
+            printLog(`發動 WebKit 漏洞攻擊序列... 目標: ${displayName}`, 'info');
 
-            // 1. 執行本地的 WebKit 漏洞
+            // 執行 WebKit 記憶體溢位
             run_webkit_exploit().then(() => {
-                document.getElementById('status').innerText = "CONSOLE_STATUS: AWAITING_USB...";
-                logToTerminal("WebKit 成功！請插入 9.00 漏洞隨身碟！", 'alert');
+                statusLabel.innerText = "AWAITING_USB";
+                statusLabel.style.color = "#ffcc00";
+                printLog("WebKit 第一階段突破成功！核心記憶體已掛起。", 'success');
+                printLog("請插入 9.00 exfathax 漏洞隨身碟以解鎖核心權限！", 'alert');
 
-                // 2. 當檢測到隨身碟觸發成功後（這裡需要對接 exploit.js 的隨身碟回呼，此處以模擬成功為例）
-                // 網頁會自己透過 JavaScript 去抓取 GitHub 上的 bin 檔案
-                fetch(`payloads/${binFileName}`)
-                    .then(response => response.arrayBuffer())
-                    .then(buffer => {
-                        logToTerminal(`成功從 GitHub 獲取 ${binFileName}，開始就地注入到 PS4 (Port 9020)...`, 'normal');
-                        
-                        // 3. 用 JS 建立 Socket 直連 PS4 本機的 9020
-                        const socket = new WebSocket('ws://127.0.0.1:9020'); // 部分環境使用客製化正向 TCP
-                        // 註：標準漏洞頁面會使用內建的引導程式（如 WebKit Payload Loader）來接收這個 ArrayBuffer
-                        
-                        // 這裡簡化邏輯：實際上 exploit.js 裡會包含一個封裝好的 pOOBS4_inject(buffer) 函式
-                        if (typeof pOOBS4_inject === 'function') {
-                            pOOBS4_inject(buffer);
-                            logToTerminal("Payload 注入指令已發出！查看電視畫面！", 'success');
-                            document.getElementById('status').innerText = "CONSOLE_STATUS: INJECT_COMPLETE";
-                        } else {
-                            logToTerminal("找不到注入副程式，請確保 exploit.js 完整。", 'alert');
-                        }
-                    });
+                // 異步抓取二進位資料，優化 PS4 記憶體處理
+                setTimeout(() => {
+                    printLog(`非同步緩衝區載入中：正在拉取 payloads/${binFile} ...`, 'warn');
+                    
+                    fetch(`payloads/${binFile}`)
+                        .then(res => {
+                            if (!res.ok) throw new Error("檔案不存在");
+                            return res.arrayBuffer();
+                        })
+                        .then(buffer => {
+                            printLog(`Payload 下載完成 (${buffer.byteLength} 字節)。等待主控端完成內置注入...`, 'info');
+                            
+                            // 呼叫底層實體注入
+                            if (typeof pOOBS4_inject === 'function') {
+                                pOOBS4_inject(buffer);
+                                printLog(`[SUCCESS] ${displayName} 已成功注入核心！`, 'success');
+                                statusLabel.innerText = "SYS_COMPLETE";
+                                statusLabel.style.color = "#00ff66";
+                            } else {
+                                printLog("未偵測到 pOOBS4_inject 副程式，請檢查 exploit.js。", 'alert');
+                            }
+                        })
+                        .catch(err => {
+                            printLog(`網路拉取錯誤: ${err.message}，請確認專案路徑是否有該 bin 檔。`, 'alert');
+                        });
+                }, 1000); 
+
+            }).catch(err => {
+                printLog("WebKit 記憶體激發失敗，請重新整理瀏覽器頁面。", 'alert');
+                statusLabel.innerText = "SYS_ERROR";
             });
         }
     </script>
