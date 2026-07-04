@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>8ET MATRIX // INSTANT OMEGA v7.2</title>
+    <title>8ET MATRIX // INSTANT OMEGA v7.3</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -54,7 +54,6 @@
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
         @media(max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
-        /* 終端機控制台 */
         .terminal-box {
             background-color: rgba(1, 3, 8, 0.98); border: 1px solid #00ff66;
             box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.05), 0 10px 30px rgba(0,0,0,0.8);
@@ -74,14 +73,12 @@
         .t-alert { color: #ff0055; font-weight: bold; }
         .t-warn { color: #ffcc00; }
         
-        /* HUD 看板 */
         .hud-panel { background: rgba(5, 10, 20, 0.9); border: 1px solid #14243b; padding: 15px; border-radius: 4px; display: flex; flex-direction: column; gap: 12px; }
         .hud-title { font-size: 12px; font-weight: bold; color: #ffffff; border-bottom: 1px solid #14243b; padding-bottom: 8px; letter-spacing: 1px; }
         .hud-item { display: flex; justify-content: space-between; font-size: 12px; }
         .hud-label { color: #57677a; }
         .hud-value { color: #00ff66; font-weight: bold; }
 
-        /* 按鈕區塊 */
         .category-group { background: rgba(4, 8, 17, 0.85); border: 1px solid #101c30; border-radius: 4px; padding: 16px; margin-bottom: 18px; }
         body.panic-mode .category-group { border-color: #380412; }
         .category-title { color: #ffffff; font-size: 12px; font-weight: bold; letter-spacing: 2px; margin-bottom: 12px; text-transform: uppercase; }
@@ -98,8 +95,6 @@
         .btn:hover:not(:disabled) { color: #000; background: #00ff66; box-shadow: 0 0 15px rgba(0,255,102,0.5); }
         .btn-mod { border-color: #ffcc00; color: #ffcc00; }
         .btn-mod:hover:not(:disabled) { background: #ffcc00 !important; }
-        .btn-adv { border-color: #00bfff; color: #00bfff; }
-        .btn-adv:hover:not(:disabled) { background: #00bfff !important; }
         .btn-chain { border-color: #b026ff; color: #b026ff; background: #0f031c; }
         .btn-chain:hover:not(:disabled) { background: #b026ff !important; color: #000; box-shadow: 0 0 15px #b026ff; }
 
@@ -108,8 +103,7 @@
         #status-bar { margin-top: 25px; padding: 10px; background: #010307; border: 1px solid #101c30; font-size: 11px; color: #4e5e70; display: flex; justify-content: space-between; }
         .status-active { color: #00ff66; font-weight: bold; }
     </style>
-    
-    </head>
+</head>
 <body>
 
     <canvas id="matrix-bg"></canvas>
@@ -118,8 +112,8 @@
         <div class="header-container">
             <div>
                 <h1>8ET // ASSASSIN_NEKO</h1>
-                <span class="system-badge">MATRIX MONOLITH v7.2</span>
-                <div class="subtitle">FAST-TRACK INJECTION HUB FOR PS4 9.00 // ZERO-WAIT ENGINE</div>
+                <span class="system-badge">INSTANT OMEGA v7.3</span>
+                <div class="subtitle">FAST-TRACK INJECTION HUB // ZERO-WAIT ENGINE</div>
             </div>
         </div>
 
@@ -163,7 +157,7 @@
             <div class="side-zone">
                 <div class="terminal-box" style="height: 250px;">
                     <div class="log-area" id="log-zone">
-                        <div class="terminal-line t-success">[SYSTEM] 獨立單元一體化網頁就緒。防護鎖已完全解除。</div>
+                        <div class="terminal-line t-success">[SYSTEM] 極速雙軌引導環境就緒。</div>
                     </div>
                     <div class="shell-line">
                         <span class="shell-prompt">neko@8et:~#</span>
@@ -175,7 +169,7 @@
                     <div class="hud-title">📊 REALTIME MONITOR</div>
                     <div class="hud-item"><span class="hud-label">WebKit Status</span><span class="hud-value">FAST_MODE</span></div>
                     <div class="hud-item"><span class="hud-label">Syscall Clocks</span><span class="hud-value">STANDBY</span></div>
-                    <div class="hud-item"><span class="hud-label">Verifier</span><span class="hud-value" style="color: #00ff66;">INTEGRATED</span></div>
+                    <div class="hud-item"><span class="hud-label">Verifier</span><span class="hud-value" style="color: #00ff66;">HYBRID_READY</span></div>
                     <div class="hud-item"><span class="hud-label">USB Intercept</span><span class="hud-value" style="color: #8899a6;">STANDBY</span></div>
                 </div>
             </div>
@@ -190,40 +184,27 @@
     </div>
 
     <script>
-        /* ==========================================
-           🛡️ 漏洞核心接口本地化宣告（代替外部 exploit.js）
-           ========================================== */
-        // 如果你的舊版核心中有特定的初始化函式，我們在這裡做全域防呆代理
-        if (typeof window.run_webkit_exploit !== 'function') {
-            window.run_webkit_exploit = function() {
-                return new Promise((resolve, reject) => {
-                    // 如果底層的 pOOBS4 基礎物件或暫存函式存在，則直接調用，否則直接放行進入 USB 阻斷
-                    if (typeof pOOBS4_init === 'function') { pOOBS4_init(); }
-                    resolve(); 
-                });
-            };
-        }
-        if (typeof window.pOOBS4_inject !== 'function') {
-            window.pOOBS4_inject = function(buf) {
-                printLog("[CORE] 執行本地快取流載入...", "info");
-                return true; 
-            };
-        }
-
-        // 網頁加載完立刻引導
+        // 日誌與特效基礎設定
         window.addEventListener('DOMContentLoaded', () => {
-            printLog("內嵌式控制引擎加載完畢。進入零延遲響應環境。", "success");
+            printLog("控制面板載入完成。等待底層 WebKit 核心綁定...", "info");
             triggerGlitchEffect();
+            
+            // 檢查外部核心是否成功掛載
+            setTimeout(() => {
+                if (typeof window.run_webkit_exploit === 'function') {
+                    printLog("[CORE] 成功聯結外部 WebKit 漏洞代碼！防護鎖完全解除。", "success");
+                } else {
+                    printLog("[WARN] 尚未偵測到 exploit.js，請確認檔案已上傳至根目錄。", "warn");
+                }
+            }, 500);
         });
 
-        // PWA 離線常駐
+        // PWA 快取
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(() => {
-                    document.getElementById('cache-status').innerText = "CACHE: 100% LOCAL CACHED (本機極速硬碟已鎖定)";
+                    document.getElementById('cache-status').innerText = "CACHE: 100% LOCAL CACHED";
                     document.getElementById('cache-status').style.color = "#00ff66";
-                }).catch(() => {
-                    document.getElementById('cache-status').innerText = "CACHE: LOCAL_MODE (快取離線就緒)";
                 });
             });
         }
@@ -252,139 +233,87 @@
             btn.addEventListener('mouseenter', () => { playSound(1000, 0.02, 'sine'); });
         });
 
-        // 互動指令列
-        const shellInput = document.getElementById('sh-in');
-        shellInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                const cmd = shellInput.value.trim().toLowerCase();
-                shellInput.value = ''; if(!cmd) return;
-                printLog(`neko@8et:~# ${cmd}`, "info");
-                triggerGlitchEffect();
-                playSound(700, 0.04, 'square');
-                
-                if (cmd === 'help') {
-                    printLog("指令: [help] 幫助 | [clear] 清屏 | [goldhen] 載入核心 | [debug] 啟動除錯 | [chain] 一鍵組合包", "warn");
-                } else if (cmd === 'clear') {
-                    document.getElementById('log-zone').innerHTML = '';
-                } else if (cmd === 'goldhen') {
-                    triggerExploit('goldhen_2.4b16.bin', 'GoldHEN 2.4');
-                } else if (cmd === 'debug') {
-                    triggerExploit('ps4debug.bin', 'PS4Debug');
-                } else if (cmd === 'chain') {
-                    triggerMultiChain(['goldhen_2.4b16.bin', 'ps4debug.bin'], 'GoldHEN + ps4debug');
-                } else {
-                    printLog(`未授權代碼: '${cmd}'`, "alert");
-                    playSound(180, 0.2, 'sawtooth');
-                }
-            }
-        });
-
-        // 數位雨背景
-        const canvas = document.getElementById('matrix-bg'); const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
-        const alphabet = "0101NEKO8ETMATRIX"; const fontSize = 13; const cols = canvas.width / fontSize;
-        const drops = Array.from({ length: cols }).fill(1); let panic = false;
-        function draw() {
-            ctx.fillStyle = panic ? 'rgba(26, 0, 5, 0.05)' : 'rgba(2, 5, 10, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = panic ? '#ff0055' : '#00ff66'; ctx.font = fontSize + 'px monospace';
-            for (let i = 0; i < drops.length; i++) {
-                const txt = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(txt, i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.985) drops[i] = 0; drops[i]++;
-            }
-        }
-        setInterval(draw, 30);
-
         function printLog(text, mode = 'info') {
-            const zone = document.getElementById('log-zone'); 
-            if(!zone) return;
+            const zone = document.getElementById('log-zone'); if(!zone) return;
             const line = document.createElement('div');
             line.className = `terminal-line t-${mode}`; line.innerText = `[${new Date().toLocaleTimeString()}] ${text}`;
             zone.appendChild(line); zone.scrollTop = zone.scrollHeight;
         }
 
-        // WebKit 多線程重試
-        let maxRetries = 3; let currentRetry = 0;
+        let currentRetry = 0;
+        let maxRetries = 3;
+
         function run_exploit_with_retry() {
             return new Promise((resolve, reject) => {
                 function attempt() {
-                    window.run_webkit_exploit().then(resolve).catch(err => {
-                        currentRetry++;
-                        document.getElementById('retry-counter').innerText = `LOOP_${currentRetry}/${maxRetries}`;
-                        document.getElementById('retry-counter').style.color = "#ffcc00";
-                        printLog(`[重試] 記憶體對齊修正中 (第 ${currentRetry} 次)...`, "warn");
-                        playSound(350, 0.25, 'sawtooth');
-                        if (currentRetry < maxRetries) { setTimeout(attempt, 400); } 
-                        else { reject(new Error("多線程環境阻斷")); }
-                    });
+                    if (typeof window.run_webkit_exploit === 'function') {
+                        window.run_webkit_exploit().then(resolve).catch(err => {
+                            currentRetry++;
+                            document.getElementById('retry-counter').innerText = `LOOP_${currentRetry}/${maxRetries}`;
+                            printLog(`[重試] 記憶體對齊修正中 (第 ${currentRetry} 次)...`, "warn");
+                            if (currentRetry < maxRetries) { setTimeout(attempt, 400); } 
+                            else { reject(new Error("WebKit 觸發環境不穩定")); }
+                        });
+                    } else {
+                        reject(new Error("找不到底層漏洞代碼 (exploit.js 遺失)"));
+                    }
                 }
                 attempt();
             });
         }
 
-        // 核心注入
         function triggerExploit(binFile, displayName) {
-            if(panic) { panic = false; document.body.classList.remove('panic-mode'); }
             triggerGlitchEffect();
             currentRetry = 0;
-            document.getElementById('retry-counter').innerText = "MONITORING";
-            
             const lbl = document.getElementById('current-status');
             lbl.innerText = "INJECTING"; lbl.style.color = "#ff0055";
-            printLog(`啟動快取發送... 目標: ${displayName}`, 'info');
+            printLog(`核心發送序列啟動 -> 目標: ${displayName}`, 'info');
 
             run_exploit_with_retry().then(() => {
                 lbl.innerText = "AWAITING_USB"; lbl.style.color = "#ffcc00";
-                printLog("WebKit 破防！請插入漏洞隨身碟觸發核心...", 'success');
-                playSound(1100, 0.15, 'sine');
-
+                printLog("WebKit 破防成功！請插入漏洞隨身碟觸發 Kernel 漏洞...", 'success');
+                
                 setTimeout(() => {
                     fetch(`payloads/${binFile}`).then(res => res.arrayBuffer()).then(buf => {
-                        if (window.pOOBS4_inject(buf)) {
-                            printLog(`[SUCCESS] ${displayName} 常駐完畢！`, 'success');
+                        if (typeof pOOBS4_inject === 'function' && pOOBS4_inject(buf)) {
+                            printLog(`[SUCCESS] ${displayName} 部署成功！`, 'success');
                             lbl.innerText = "SYS_COMPLETE"; lbl.style.color = "#00ff66";
-                        } else {
-                            printLog("注入失敗：核心發送函數未就緒。", "alert");
                         }
-                    }).catch(e => triggerPanic(`快取讀取失敗（請確認 payloads/${binFile} 存在）: ${e.message}`));
+                    }).catch(e => triggerPanic(`讀取 payloads/${binFile} 失敗`));
                 }, 1000);
-            }).catch(err => triggerPanic(err.message));
+            }).catch(err => triggerPanic(err.err || err.message));
         }
 
-        // 一鍵雙星串聯
         function triggerMultiChain(binArray, chainName) {
-            if(panic) { panic = false; document.body.classList.remove('panic-mode'); }
             triggerGlitchEffect();
             currentRetry = 0;
             const lbl = document.getElementById('current-status');
             lbl.innerText = "CHAIN_LOAD"; lbl.style.color = "#b026ff";
-            printLog(`[CHAIN] 一鍵啟用雙星鏈結: [${chainName}]`, 'warn');
+            printLog(`[CHAIN] 雙星複合鏈發送 -> [${chainName}]`, 'warn');
 
             run_exploit_with_retry().then(() => {
                 lbl.innerText = "AWAITING_USB"; lbl.style.color = "#ffcc00";
-                printLog("鏈結 WebKit 破防成功！請接入漏洞隨身碟...", "success");
+                printLog("鏈結破防成功！請接入漏洞隨身碟...", "success");
 
                 Promise.all(binArray.map(bin => fetch(`payloads/${bin}`).then(res => res.arrayBuffer())))
                 .then(buffers => {
                     buffers.forEach((buf, idx) => {
-                        window.pOOBS4_inject(buf);
-                        printLog(`[CHAIN] 單元 #${idx+1} 安全掛載。`, 'success');
+                        if (typeof pOOBS4_inject === 'function') pOOBS4_inject(buf);
                     });
-                    printLog(`[SUCCESS] 雙星複合鏈 [${chainName}] 部署完畢！`, 'success');
+                    printLog(`[SUCCESS] 複合鏈 [${chainName}] 部署完畢！`, 'success');
                     lbl.innerText = "SYS_COMPLETE"; lbl.style.color = "#00ff66";
-                    playSound(2200, 0.35, 'sine');
-                }).catch(e => triggerPanic(`鏈結資源讀取錯誤: ${e.message}`));
+                }).catch(e => triggerPanic("鏈結資源加載失敗"));
             }).catch(err => triggerPanic(err.message));
         }
 
         function triggerPanic(msg) {
-            panic = true; document.body.classList.add('panic-mode');
+            document.body.classList.add('panic-mode');
             document.getElementById('current-status').innerText = "KERNEL_PANIC";
             printLog(`[CRITICAL] ${msg}`, 'alert');
-            playSound(90, 0.5, 'sawtooth');
             triggerGlitchEffect();
         }
     </script>
+    
+    <script src="exploit.js"></script>
 </body>
 </html>
