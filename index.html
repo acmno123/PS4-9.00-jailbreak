@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <title>8ET MATRIX // OMEGA KERNEL REFORGED v7.0</title>
+    <title>8ET MATRIX // INSTANT OMEGA v7.1</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -15,11 +15,9 @@
             position: relative;
         }
 
-        /* 致命錯誤紅光模式 */
         body.panic-mode { background-color: #1a0005 !important; color: #ff0055 !important; }
         body.panic-mode::before { background: linear-gradient(rgba(255, 0, 85, 0.08) 1px, transparent 1px) !important; }
 
-        /* 賽博朋克背景網格與掃描線 */
         body::before {
             content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: linear-gradient(rgba(0, 255, 102, 0.02) 1px, transparent 1px),
@@ -35,7 +33,6 @@
         #matrix-bg { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; opacity: 0.08; }
         .main-frame { max-width: 1200px; margin: 0 auto; z-index: 1; position: relative; }
 
-        /* 螢幕閃爍動畫特效 */
         .glitch-flash { animation: glitch 0.15s ease-in-out; }
         @keyframes glitch {
             0% { transform: translate(2px, 1px) skews(0deg); filter: hue-rotate(90deg); }
@@ -43,9 +40,8 @@
             100% { transform: translate(0px, 0px) skews(0deg); }
         }
 
-        /* 頂部控制面板 */
         .header-container {
-            border-bottom: 2px dashed #00ff66; padding-bottom: 15px; margin-bottom: 20px;
+            border-bottom: 2px dashed #00ff66; padding-bottom: 15px; margin-bottom: 25px;
             display: flex; justify-content: space-between; align-items: flex-end;
         }
         body.panic-mode .header-container { border-bottom-color: #ff0055; }
@@ -55,18 +51,10 @@
         .system-badge { background: #ff0055; color: #000; font-weight: bold; font-size: 11px; padding: 3px 8px; vertical-align: super; margin-left: 10px; box-shadow: 0 0 12px #ff0055; }
         .subtitle { color: #8899a6; font-size: 12px; letter-spacing: 2px; margin-top: 5px; }
 
-        /* 高階預熱模組 UI */
-        .warmup-container { background: rgba(4, 10, 20, 0.85); border: 1px solid #00ff66; padding: 12px 18px; border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; position: relative; }
-        body.panic-mode .warmup-container { border-color: #ff0055; }
-        .warmup-text { font-size: 13px; font-weight: bold; display: flex; align-items: center; gap: 8px; }
-        .warmup-progress-bg { width: 60%; height: 8px; background: #050a14; border-radius: 4px; overflow: hidden; border: 1px solid #14243b; }
-        .warmup-progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #00aa44, #00ff66); box-shadow: 0 0 12px #00ff66; transition: width 0.04s linear; }
-
-        /* 雙欄佈局：左側選單，右側 HUD 看板 */
         .dashboard-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
         @media(max-width: 900px) { .dashboard-grid { grid-template-columns: 1fr; } }
 
-        /* 終端機與互動式命令列 */
+        /* 終端機控制台 */
         .terminal-box {
             background-color: rgba(1, 3, 8, 0.98); border: 1px solid #00ff66;
             box-shadow: inset 0 0 20px rgba(0, 255, 102, 0.05), 0 10px 30px rgba(0,0,0,0.8);
@@ -86,14 +74,14 @@
         .t-alert { color: #ff0055; font-weight: bold; }
         .t-warn { color: #ffcc00; }
         
-        /* 右側即時狀態 HUD 看板 */
+        /* HUD 看板 */
         .hud-panel { background: rgba(5, 10, 20, 0.9); border: 1px solid #14243b; padding: 15px; border-radius: 4px; display: flex; flex-direction: column; gap: 12px; }
         .hud-title { font-size: 12px; font-weight: bold; color: #ffffff; border-bottom: 1px solid #14243b; padding-bottom: 8px; letter-spacing: 1px; }
         .hud-item { display: flex; justify-content: space-between; font-size: 12px; }
         .hud-label { color: #57677a; }
         .hud-value { color: #00ff66; font-weight: bold; }
 
-        /* 區塊面板與按鈕 */
+        /* 按鈕區塊 */
         .category-group { background: rgba(4, 8, 17, 0.85); border: 1px solid #101c30; border-radius: 4px; padding: 16px; margin-bottom: 18px; }
         body.panic-mode .category-group { border-color: #380412; }
         .category-title { color: #ffffff; font-size: 12px; font-weight: bold; letter-spacing: 2px; margin-bottom: 12px; text-transform: uppercase; }
@@ -130,15 +118,8 @@
         <div class="header-container">
             <div>
                 <h1>8ET // ASSASSIN_NEKO</h1>
-                <span class="system-badge">REFORGED V7</span>
-                <div class="subtitle">MAXIMUM STABILITY ENVIRONMENT FOR PS4 9.00 // DYNAMIC MEMORY ALIGNER</div>
-            </div>
-        </div>
-
-        <div class="warmup-container">
-            <span class="warmup-text" id="warmup-status">💎 正在引導動態記憶體噴泉防撞引擎...</span>
-            <div class="warmup-progress-bg">
-                <div class="warmup-progress-bar" id="warmup-bar"></div>
+                <span class="system-badge">INSTANT V7.1</span>
+                <div class="subtitle">FAST-TRACK INJECTION HUB FOR PS4 9.00 // ZERO-WAIT ENGINE</div>
             </div>
         </div>
 
@@ -146,35 +127,35 @@
             
             <div class="menu-zone">
                 <div class="category-group">
-                    <div class="category-title">00 / Automated Multi-Payload Chains (複合特權鏈)</div>
+                    <div class="category-title">00 / Automated Multi-Payload Chains (一鍵雙星複合鏈)</div>
                     <div class="menu-container">
-                        <button class="btn btn-chain main-action-btn" onclick="triggerMultiChain(['goldhen_2.4b16.bin', 'ps4debug.bin'], 'GoldHEN + ps4debug')" disabled>⚡ ONE-CLICK HYBRID: GOLDHEN + PS4DEBUG</button>
+                        <button class="btn btn-chain" onclick="triggerMultiChain(['goldhen_2.4b16.bin', 'ps4debug.bin'], 'GoldHEN + ps4debug')">⚡ ONE-CLICK HYBRID: GOLDHEN + PS4DEBUG</button>
                     </div>
                 </div>
 
                 <div class="category-group">
-                    <div class="category-title">01 / System Kernel Injectors (系統解鎖)</div>
+                    <div class="category-title">01 / System Kernel Injectors (核心加載)</div>
                     <div class="menu-container">
-                        <button class="btn main-action-btn" onclick="triggerExploit('goldhen_2.4b16.bin', 'GoldHEN v2.4b16')" disabled>LAUNCH GOLDHEN 2.4</button>
-                        <button class="btn main-action-btn" onclick="triggerExploit('ftp.bin', 'FTP Server')" disabled>START FTP SERVICE</button>
-                        <button class="btn main-action-btn" onclick="triggerExploit('app2usb.bin', 'App2USB')" disabled>APP2USB (硬碟轉移)</button>
+                        <button class="btn" onclick="triggerExploit('goldhen_2.4b16.bin', 'GoldHEN v2.4b16')">LAUNCH GOLDHEN 2.4</button>
+                        <button class="btn" onclick="triggerExploit('ftp.bin', 'FTP Server')">START FTP SERVICE</button>
+                        <button class="btn" onclick="triggerExploit('app2usb.bin', 'App2USB')">APP2USB (外掛硬碟移轉)</button>
                     </div>
                 </div>
 
                 <div class="category-group">
-                    <div class="category-title">02 / Trainers & Debug Tools (修改器與偵錯)</div>
+                    <div class="category-title">02 / Trainers & Debug Tools (金手指與遠端修改)</div>
                     <div class="menu-container">
-                        <button class="btn btn-mod main-action-btn" onclick="triggerExploit('webrte.bin', 'WebRTE')" disabled>LOAD WEBRTE (金手指後端)</button>
-                        <button class="btn btn-mod main-action-btn" onclick="triggerExploit('ps4debug.bin', 'PS4Debug')" disabled>START PS4DEBUG (遠端除錯)</button>
-                        <button class="btn btn-mod main-action-btn" onclick="triggerExploit('gtav_lefter_900.bin', 'GTA V Mod Menu')" disabled>GTA V MOD MENU</button>
+                        <button class="btn btn-mod" onclick="triggerExploit('webrte.bin', 'WebRTE')">LOAD WEBRTE ENGINE</button>
+                        <button class="btn btn-mod" onclick="triggerExploit('ps4debug.bin', 'PS4Debug')">START PS4DEBUG</button>
+                        <button class="btn btn-mod" onclick="triggerExploit('gtav_lefter_900.bin', 'GTA V Mod Menu')">GTA V MOD MENU</button>
                     </div>
                 </div>
 
                 <div class="category-group">
-                    <div class="category-title">03 / Security Shields (安全防禦)</div>
+                    <div class="category-title">03 / Security Shields (系統防禦)</div>
                     <div class="menu-container">
-                        <button class="btn main-action-btn" onclick="triggerExploit('disableupdate.bin', 'Disable Update')" disabled>BLOCK SONY UPDATES (阻斷更新)</button>
-                        <button class="btn main-action-btn" onclick="triggerExploit('todex.bin', 'ToDEX')" disabled>TODEX MODE</button>
+                        <button class="btn" onclick="triggerExploit('disableupdate.bin', 'Disable Update')">BLOCK SONY UPDATES (阻斷更新)</button>
+                        <button class="btn" onclick="triggerExploit('todex.bin', 'ToDEX')">TODEX MODE</button>
                     </div>
                 </div>
             </div>
@@ -182,20 +163,20 @@
             <div class="side-zone">
                 <div class="terminal-box" style="height: 250px;">
                     <div class="log-area" id="log-zone">
-                        <div class="terminal-line t-info">[SYSTEM] 快取守護行程線上就緒。</div>
+                        <div class="terminal-line t-success">[READY] 閃電引導就緒。所有按鈕防護鎖已解除。</div>
                     </div>
                     <div class="shell-line">
                         <span class="shell-prompt">neko@8et:~#</span>
-                        <input type="text" class="shell-input" id="sh-in" placeholder="輸入核心指令..." disabled>
+                        <input type="text" class="shell-input" id="sh-in" placeholder="輸入指令...">
                     </div>
                 </div>
 
                 <div class="hud-panel">
-                    <div class="hud-title">📊 REALTIME SYSTEM MONITOR</div>
-                    <div class="hud-item"><span class="hud-label">WebKit Heap</span><span class="hud-value" id="hud-heap">STABILIZING</span></div>
-                    <div class="hud-item"><span class="hud-label">Syscall 11 Clocks</span><span class="hud-value" id="hud-syscall">READY</span></div>
-                    <div class="hud-item"><span class="hud-label">Binary Verifier</span><span class="hud-value" style="color: #ffcc00;" id="hud-verify">PASSING</span></div>
-                    <div class="hud-item"><span class="hud-label">USB Intercept</span><span class="hud-value" style="color: #8899a6;" id="hud-usb">STANDBY</span></div>
+                    <div class="hud-title">📊 REALTIME MONITOR</div>
+                    <div class="hud-item"><span class="hud-label">WebKit Status</span><span class="hud-value">FAST_MODE</span></div>
+                    <div class="hud-item"><span class="hud-label">Syscall Clocks</span><span class="hud-value">STANDBY</span></div>
+                    <div class="hud-item"><span class="hud-label">Verifier</span><span class="hud-value" style="color: #00ff66;">ACTIVE</span></div>
+                    <div class="hud-item"><span class="hud-label">USB Intercept</span><span class="hud-value" style="color: #8899a6;">STANDBY</span></div>
                 </div>
             </div>
 
@@ -204,22 +185,21 @@
         <div id="status-bar">
             <span id="cache-status">CACHE: INITIALIZING...</span>
             <span>RETRY LOOP: <span id="retry-counter" style="color:#ffffff;">MONITORING</span></span>
-            <span>ENV_STATUS: <span id="current-status" class="status-active">SYS_STANDBY</span></span>
+            <span>STATUS: <span id="current-status" class="status-active">SYS_STANDBY</span></span>
         </div>
     </div>
 
     <script>
-        // --- 離線快取註冊 ---
+        // PWA 離線常駐
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js').then(() => {
-                    document.getElementById('cache-status').innerText = "CACHE: 100% LOCAL CACHED (零延遲本機執行)";
+                    document.getElementById('cache-status').innerText = "CACHE: 100% LOCAL CACHED (已鎖定本機硬碟)";
                     document.getElementById('cache-status').style.color = "#00ff66";
                 });
             });
         }
 
-        // --- 聲學與觸覺回饋合成器 ---
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(freq, duration, type = 'sine') {
             try {
@@ -232,7 +212,6 @@
             } catch(e){}
         }
 
-        // 畫面的炫酷黑客矩陣閃爍特效
         function triggerGlitchEffect() {
             const frame = document.getElementById('app-frame');
             frame.classList.add('glitch-flash');
@@ -240,48 +219,10 @@
         }
 
         document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('mouseenter', () => { if(!btn.disabled) playSound(1000, 0.02, 'sine'); });
+            btn.addEventListener('mouseenter', () => { playSound(1000, 0.02, 'sine'); });
         });
 
-        // --- 功能 2: 多重記憶體噴泉混淆與預熱 ---
-        window.addEventListener('DOMContentLoaded', () => {
-            let p = 0; const bar = document.getElementById('warmup-bar'); const txt = document.getElementById('warmup-status');
-            
-            const iv = setInterval(() => {
-                p += Math.floor(Math.random() * 15) + 8;
-                if (p > 100) p = 100;
-                bar.style.width = p + '%';
-                
-                if(p < 40) {
-                    txt.innerText = `⚡ 正在分配 WebKit 對齊指針... ${p}%`;
-                    document.getElementById('hud-heap').innerText = "SPRAYING";
-                    document.getElementById('hud-heap').style.color = "#ffcc00";
-                    // 執行多重記憶體噴泉混淆，重整瀏覽器佈局
-                    let heapShift = Array.from({length: 15}, () => new Uint32Array(0x4000));
-                } else if(p < 80) {
-                    txt.innerText = `⚡ 強制觸發防死機核心垃圾清理... ${p}%`;
-                    document.getElementById('hud-heap').innerText = "PURGING GC";
-                    document.getElementById('hud-heap').style.color = "#00bfff";
-                    playSound(500, 0.01, 'triangle');
-                } else {
-                    txt.innerText = `⚡ 核心安全機制校對與鎖定中... ${p}%`;
-                }
-
-                if(p === 100) {
-                    clearInterval(iv);
-                    txt.innerText = "✅ 記憶體佈局優化完畢：環境極度穩定 (ANTI-PANIC ACTIVE)";
-                    txt.style.color = "#00ff66";
-                    document.getElementById('hud-heap').innerText = "OPTIMIZED";
-                    document.getElementById('hud-heap').style.color = "#00ff66";
-                    playSound(1600, 0.15, 'sine');
-                    printLog("動態防死機引擎對齊完畢。終端互動控制台解鎖。", "success");
-                    document.querySelectorAll('.main-action-btn').forEach(b => b.disabled = false);
-                    document.getElementById('sh-in').disabled = false;
-                }
-            }, 60);
-        });
-
-        // --- 互動式命令列解析 ---
+        // 互動指令列
         const shellInput = document.getElementById('sh-in');
         shellInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -292,7 +233,7 @@
                 playSound(700, 0.04, 'square');
                 
                 if (cmd === 'help') {
-                    printLog("核心命令: [help] 支援 | [clear] 清屏 | [goldhen] 載入系統 | [debug] 啟動除錯 | [chain] 一鍵雙星注入", "warn");
+                    printLog("指令: [help] 幫助 | [clear] 清屏 | [goldhen] 載入核心 | [debug] 啟動除錯 | [chain] 一鍵組合包", "warn");
                 } else if (cmd === 'clear') {
                     document.getElementById('log-zone').innerHTML = '';
                 } else if (cmd === 'goldhen') {
@@ -302,17 +243,17 @@
                 } else if (cmd === 'chain') {
                     triggerMultiChain(['goldhen_2.4b16.bin', 'ps4debug.bin'], 'GoldHEN + ps4debug');
                 } else {
-                    printLog(`未授權代碼指令: '${cmd}'`, "alert");
+                    printLog(`未授權代碼: '${cmd}'`, "alert");
                     playSound(180, 0.2, 'sawtooth');
                 }
             }
         });
 
-        // --- 數位雨渲染 ---
+        // 數位雨背景
         const canvas = document.getElementById('matrix-bg'); const ctx = canvas.getContext('2d');
         function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resize); resize();
-        const alphabet = "0101NEKO8ETMATRIX<>//+-"; const fontSize = 13; const cols = canvas.width / fontSize;
+        const alphabet = "0101NEKO8ETMATRIX"; const fontSize = 13; const cols = canvas.width / fontSize;
         const drops = Array.from({ length: cols }).fill(1); let panic = false;
         function draw() {
             ctx.fillStyle = panic ? 'rgba(26, 0, 5, 0.05)' : 'rgba(2, 5, 10, 0.05)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -331,7 +272,7 @@
             zone.appendChild(line); zone.scrollTop = zone.scrollHeight;
         }
 
-        // --- WebKit 多線程自動重試封裝 ---
+        // WebKit 多線程重試
         let maxRetries = 3; let currentRetry = 0;
         function run_exploit_with_retry() {
             return new Promise((resolve, reject) => {
@@ -340,99 +281,70 @@
                         currentRetry++;
                         document.getElementById('retry-counter').innerText = `LOOP_${currentRetry}/${maxRetries}`;
                         document.getElementById('retry-counter').style.color = "#ffcc00";
-                        printLog(`[修復] 記憶體指針撞車，引導第 ${currentRetry} 次自動多線程重組...`, "warn");
+                        printLog(`[重試] 記憶體對齊修正中 (第 ${currentRetry} 次)...`, "warn");
                         playSound(350, 0.25, 'sawtooth');
-                        
                         if (currentRetry < maxRetries) { setTimeout(attempt, 400); } 
-                        else { reject(new Error("環境佈局鎖死，防崩潰機制阻斷")); }
+                        else { reject(new Error("多線程環境阻斷")); }
                     });
                 }
                 attempt();
             });
         }
 
-        // --- 功能 1: 二進位完整性校驗與單一注入 ---
+        // 核心注入
         function triggerExploit(binFile, displayName) {
             triggerGlitchEffect();
             currentRetry = 0;
             document.getElementById('retry-counter').innerText = "MONITORING";
-            document.getElementById('retry-counter').style.color = "#00ff66";
             
             const lbl = document.getElementById('current-status');
             lbl.innerText = "INJECTING"; lbl.style.color = "#ff0055";
-            document.getElementById('hud-usb').innerText = "INTERCEPTING";
-            document.getElementById('hud-usb').style.color = "#ffcc00";
-            printLog(`發動二進位注入核心常駐程序... 目標: ${displayName}`, 'info');
+            printLog(`啟動快取發送... 目標: ${displayName}`, 'info');
 
             run_exploit_with_retry().then(() => {
                 lbl.innerText = "AWAITING_USB"; lbl.style.color = "#ffcc00";
-                printLog("WebKit 控制權奪取成功！請將 ExFAT 隨身碟接入 PS4 主機...", 'success');
+                printLog("WebKit 破防！請插入漏洞隨身碟觸發核心...", 'success');
                 playSound(1100, 0.15, 'sine');
 
                 setTimeout(() => {
-                    printLog(`讀取快取 /payloads/${binFile} ...`, 'warn');
-                    
                     fetch(`payloads/${binFile}`).then(res => res.arrayBuffer()).then(buf => {
-                        
-                        // 動態結構完整性檢查
-                        document.getElementById('hud-verify').innerText = "VERIFYING";
-                        document.getElementById('hud-verify').style.color = "#ffcc00";
-                        
-                        if(buf.byteLength < 1000) {
-                            throw new Error("二進位檔案完整性校驗失敗：數據損壞或空位元組");
-                        }
-                        
-                        document.getElementById('hud-verify').innerText = "VERIFIED (OK)";
-                        document.getElementById('hud-verify').style.color = "#00ff66";
-
                         if (pOOBS4_inject(buf)) {
-                            printLog(`[SUCCESS] ${displayName} 注入常駐成功！`, 'success');
+                            printLog(`[SUCCESS] ${displayName} 常駐完畢！`, 'success');
                             lbl.innerText = "SYS_COMPLETE"; lbl.style.color = "#00ff66";
-                            document.getElementById('hud-usb').innerText = "MOUNTED";
-                            document.getElementById('hud-usb').style.color = "#00ff66";
                         }
-                    }).catch(e => triggerPanic(`緩衝區校驗崩潰: ${e.message}`));
-                }, 1400);
+                    }).catch(e => triggerPanic(`加載失敗: ${e.message}`));
+                }, 1000);
             }).catch(err => triggerPanic(err.message));
         }
 
-        // --- 雙星 Payload 串聯注入驅動 ---
+        // 一鍵雙星串聯
         function triggerMultiChain(binArray, chainName) {
             triggerGlitchEffect();
             currentRetry = 0;
             const lbl = document.getElementById('current-status');
             lbl.innerText = "CHAIN_LOAD"; lbl.style.color = "#b026ff";
-            document.getElementById('hud-usb').innerText = "INTERCEPTING";
-            document.getElementById('hud-usb').style.color = "#ffcc00";
-            printLog(`[🔥 CHAIN] 喚醒雙星複合特權鏈: [${chainName}]`, 'warn');
+            printLog(`[CHAIN] 一鍵啟用雙星鏈結: [${chainName}]`, 'warn');
 
             run_exploit_with_retry().then(() => {
                 lbl.innerText = "AWAITING_USB"; lbl.style.color = "#ffcc00";
-                printLog("鏈結 WebKit 破防完成！請確保隨身碟已妥善接入...", "success");
+                printLog("鏈結 WebKit 破防成功！請接入漏洞隨身碟...", "success");
 
                 Promise.all(binArray.map(bin => fetch(`payloads/${bin}`).then(res => res.arrayBuffer())))
                 .then(buffers => {
-                    printLog(`雙核數據流打包完畢。啟動序列二進位動態鏈結注入...`, 'info');
-                    
                     buffers.forEach((buf, idx) => {
                         pOOBS4_inject(buf);
-                        printLog(`[CHAIN] 模組序列 #${idx+1} 已完成核心安全寫入。`, 'success');
+                        printLog(`[CHAIN] 單元 #${idx+1} 安全掛載。`, 'success');
                     });
-
-                    printLog(`[SUCCESS] 雙星複合鏈 [${chainName}] 全數部署常駐！`, 'success');
+                    printLog(`[SUCCESS] 雙星複合鏈 [${chainName}] 部署完畢！`, 'success');
                     lbl.innerText = "SYS_COMPLETE"; lbl.style.color = "#00ff66";
-                    document.getElementById('hud-usb').innerText = "MOUNTED";
-                    document.getElementById('hud-usb').style.color = "#00ff66";
                     playSound(2200, 0.35, 'sine');
-                }).catch(e => triggerPanic(`串聯載入中斷: ${e.message}`));
+                }).catch(e => triggerPanic(`鏈結錯誤: ${e.message}`));
             }).catch(err => triggerPanic(err.message));
         }
 
         function triggerPanic(msg) {
             panic = true; document.body.classList.add('panic-mode');
             document.getElementById('current-status').innerText = "KERNEL_PANIC";
-            document.getElementById('hud-heap').innerText = "CRASHED";
-            document.getElementById('hud-heap').style.color = "#ff0055";
             printLog(`[CRITICAL] ${msg}`, 'alert');
             playSound(90, 0.5, 'sawtooth');
             triggerGlitchEffect();
