@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>8ET HACKING CONSOLE // GITHUB HOST</title>
+    <style>
+        body { background-color: #0a0c10; color: #00ffcc; font-family: 'Courier New', monospace; text-align: center; padding: 30px; margin: 0; }
+        h1 { font-size: 42px; color: #00ffcc; text-shadow: 0 0 10px #00ffcc; }
+        .subtitle { color: #ff0055; font-size: 14px; letter-spacing: 4px; margin-bottom: 30px; }
+        .terminal-box { background-color: #05070a; border: 1px solid #00ffcc; max-width: 900px; margin: 0 auto 30px auto; padding: 15px; border-radius: 5px; text-align: left; height: 100px; overflow-y: auto; font-size: 14px; }
+        .terminal-line { color: #8899a6; margin: 2px 0; }
+        .terminal-success { color: #00ffcc; font-weight: bold; }
+        .terminal-alert { color: #ff0055; font-weight: bold; }
+        .category-title { color: #ff0055; text-align: left; max-width: 900px; margin: 30px auto 12px auto; font-size: 16px; border-left: 3px solid #ff0055; padding-left: 10px; }
+        .menu-container { display: flex; justify-content: flex-start; gap: 15px; flex-wrap: wrap; max-width: 900px; margin: 0 auto; }
+        .btn { background: #10141d; border: 1px solid #005544; color: #00ffcc; padding: 16px 20px; font-size: 15px; cursor: pointer; border-radius: 4px; transition: all 0.25s; width: 210px; }
+        .btn:hover { color: #ffffff; background: #00ffcc; box-shadow: 0 0 20px #00ffcc; transform: translateY(-3px); font-weight: bold; }
+        #status { margin-top: 40px; font-size: 18px; color: #00ffcc; background: #0b1116; display: inline-block; padding: 12px 35px; border-radius: 4px; border: 1px solid #ff0055; }
+    </style>
+    <script src="exploit.js"></script>
+</head>
+<body>
+
+    <h1>8ET 刺客貓貓 // CLOUD_FRAME</h1>
+    <div class="subtitle">PS4 9.00 GITHUB WEB HOSTED SYSTEM</div>
+
+    <div class="terminal-box" id="terminal">
+        <div class="terminal-line">[SYSTEM] GitHub 雲端主控台已就緒。</div>
+        <div class="terminal-line">[SYSTEM] 請在一樓 PS4 連上網路並點擊下方按鈕...</div>
+    </div>
+
+    <div class="category-title">// 01 _ CLOUD_INJECTION</div>
+    <div class="menu-container">
+        <button class="btn" onclick="triggerCloudExploit('goldhen_2.4b16.bin')">GoldHEN v2.4b16</button>
+        <button class="btn" onclick="triggerCloudExploit('webrte.bin')">WebRTE Trainer</button>
+        <button class="btn" onclick="triggerCloudExploit('ftp.bin')">FTP Server</button>
+        <button class="btn" onclick="triggerCloudExploit('disableupdate.bin')">Disable Update</button>
+    </div>
+
+    <div id="status">CONSOLE_STATUS: CLOUD_READY</div>
+
+    <script>
+        function logToTerminal(text, type = 'normal') {
+            const term = document.getElementById('terminal');
+            const line = document.createElement('div');
+            line.className = 'terminal-line';
+            if(type === 'success') line.className += ' terminal-success';
+            if(type === 'alert') line.className += ' terminal-alert';
+            line.innerText = `[${new Date().toLocaleTimeString()}] ` + text;
+            term.appendChild(line);
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function triggerCloudExploit(binFileName) {
+            document.getElementById('status').innerText = "CONSOLE_STATUS: RUNNING_WEBKIT...";
+            logToTerminal(`下載並加載漏洞核心... 準備注入: ${binFileName}`);
+
+            // 1. 執行本地的 WebKit 漏洞
+            run_webkit_exploit().then(() => {
+                document.getElementById('status').innerText = "CONSOLE_STATUS: AWAITING_USB...";
+                logToTerminal("WebKit 成功！請插入 9.00 漏洞隨身碟！", 'alert');
+
+                // 2. 當檢測到隨身碟觸發成功後（這裡需要對接 exploit.js 的隨身碟回呼，此處以模擬成功為例）
+                // 網頁會自己透過 JavaScript 去抓取 GitHub 上的 bin 檔案
+                fetch(`payloads/${binFileName}`)
+                    .then(response => response.arrayBuffer())
+                    .then(buffer => {
+                        logToTerminal(`成功從 GitHub 獲取 ${binFileName}，開始就地注入到 PS4 (Port 9020)...`, 'normal');
+                        
+                        // 3. 用 JS 建立 Socket 直連 PS4 本機的 9020
+                        const socket = new WebSocket('ws://127.0.0.1:9020'); // 部分環境使用客製化正向 TCP
+                        // 註：標準漏洞頁面會使用內建的引導程式（如 WebKit Payload Loader）來接收這個 ArrayBuffer
+                        
+                        // 這裡簡化邏輯：實際上 exploit.js 裡會包含一個封裝好的 pOOBS4_inject(buffer) 函式
+                        if (typeof pOOBS4_inject === 'function') {
+                            pOOBS4_inject(buffer);
+                            logToTerminal("Payload 注入指令已發出！查看電視畫面！", 'success');
+                            document.getElementById('status').innerText = "CONSOLE_STATUS: INJECT_COMPLETE";
+                        } else {
+                            logToTerminal("找不到注入副程式，請確保 exploit.js 完整。", 'alert');
+                        }
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
