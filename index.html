@@ -35,9 +35,10 @@
 
         .glitch-flash { animation: glitch 0.15s ease-in-out; }
         @keyframes glitch {
-            0% { transform: translate(2px, 1px) skews(0deg); filter: hue-rotate(90deg); }
-            50% { transform: translate(-1px, -1px) skews(2deg); opacity: 0.8; }
-            100% { transform: translate(0px, 0px) skews(0deg); }
+            /* 修正 skews -> skew */
+            0% { transform: translate(2px, 1px) skew(0deg); filter: hue-rotate(90deg); }
+            50% { transform: translate(-1px, -1px) skew(2deg); opacity: 0.8; }
+            100% { transform: translate(0px, 0px) skew(0deg); }
         }
 
         .header-container {
@@ -163,7 +164,7 @@
             <div class="side-zone">
                 <div class="terminal-box" style="height: 250px;">
                     <div class="log-area" id="log-zone">
-                        <div class="terminal-line t-success">[READY] 閃電引導就緒。所有按鈕防護鎖已解除。</div>
+                        <div class="terminal-line t-success">[SYSTEM] 閃電引導就緒。所有按鈕防護鎖已解除。</div>
                     </div>
                     <div class="shell-line">
                         <span class="shell-prompt">neko@8et:~#</span>
@@ -190,6 +191,12 @@
     </div>
 
     <script>
+        // 確保網頁載入後立刻初始化狀態日誌
+        window.addEventListener('DOMContentLoaded', () => {
+            printLog("動態環境載入完成。已進入零等待極速模式。", "success");
+            triggerGlitchEffect();
+        });
+
         // PWA 離線常駐
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -214,8 +221,10 @@
 
         function triggerGlitchEffect() {
             const frame = document.getElementById('app-frame');
-            frame.classList.add('glitch-flash');
-            setTimeout(() => frame.classList.remove('glitch-flash'), 150);
+            if(frame) {
+                frame.classList.add('glitch-flash');
+                setTimeout(() => frame.classList.remove('glitch-flash'), 150);
+            }
         }
 
         document.querySelectorAll('.btn').forEach(btn => {
@@ -267,7 +276,9 @@
         setInterval(draw, 30);
 
         function printLog(text, mode = 'info') {
-            const zone = document.getElementById('log-zone'); const line = document.createElement('div');
+            const zone = document.getElementById('log-zone'); 
+            if(!zone) return;
+            const line = document.createElement('div');
             line.className = `terminal-line t-${mode}`; line.innerText = `[${new Date().toLocaleTimeString()}] ${text}`;
             zone.appendChild(line); zone.scrollTop = zone.scrollHeight;
         }
@@ -287,7 +298,11 @@
                         else { reject(new Error("多線程環境阻斷")); }
                     });
                 }
-                attempt();
+                if (typeof run_webkit_exploit === 'function') {
+                    attempt();
+                } else {
+                    reject(new Error("找不到漏洞破防核心 (exploit.js 斷聯)"));
+                }
             });
         }
 
@@ -308,9 +323,11 @@
 
                 setTimeout(() => {
                     fetch(`payloads/${binFile}`).then(res => res.arrayBuffer()).then(buf => {
-                        if (pOOBS4_inject(buf)) {
+                        if (typeof pOOBS4_inject === 'function' && pOOBS4_inject(buf)) {
                             printLog(`[SUCCESS] ${displayName} 常駐完畢！`, 'success');
                             lbl.innerText = "SYS_COMPLETE"; lbl.style.color = "#00ff66";
+                        } else {
+                            printLog("注入失敗：核心發送函數未就緒。", "alert");
                         }
                     }).catch(e => triggerPanic(`加載失敗: ${e.message}`));
                 }, 1000);
@@ -332,8 +349,8 @@
                 Promise.all(binArray.map(bin => fetch(`payloads/${bin}`).then(res => res.arrayBuffer())))
                 .then(buffers => {
                     buffers.forEach((buf, idx) => {
-                        pOOBS4_inject(buf);
-                        printLog(`[CHAIN] 單元 #${idx+1} 安全掛載。`, 'success');
+                        if (typeof pOOBS4_inject === 'function') pOOBS4_inject(buf);
+                        printLog(`[CHAIN] 単元 #${idx+1} 安全掛載。`, 'success');
                     });
                     printLog(`[SUCCESS] 雙星複合鏈 [${chainName}] 部署完畢！`, 'success');
                     lbl.innerText = "SYS_COMPLETE"; lbl.style.color = "#00ff66";
